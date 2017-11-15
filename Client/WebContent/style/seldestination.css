@@ -1,0 +1,50 @@
+.input-form-dest {
+	margin-left : 24px;
+	margin-top : 23px;
+	margin-right : 24px;
+	font-size : 16px;
+}
+
+.label-dest {
+	height : 20px;
+	display : flx;
+	padding-bottom : 7px;
+}
+
+.label-dest span {
+	
+}
+
+.label-dest input {
+	width : 210px;
+	float : right;
+	margin-top : -2px;
+	height : 18px;
+}
+
+.submit-button-holder {
+	margin-top : 30px;
+	text-align : center;
+}
+
+.submitb {
+    font-size : 20px;
+    font-weight : 300;
+    background-color : #7DD700;
+    border: 1px solid black;
+    border-radius: 7px;
+    width : 90px;
+    height : 40px;
+}
+
+.submitb:hover {
+    opacity : .7;
+    font-weight: 700;
+}
+
+.warning {
+    font-size: 14px;
+    color: #ff0000;
+    margin-top: 15px;
+    margin-left: 24px;
+}

@@ -1,0 +1,79 @@
+.ProfileForm {
+	margin-bottom: 10px;
+}
+
+.divTabelProfile{
+	height: 160px;
+}
+
+.tabelProfile{
+	width: 400px;
+	table-layout: fixed;
+}
+
+.containerPict {
+	height: 140px;
+	width: 140px;
+}
+
+.pictProfile {
+	height: 140px;
+	width: 140px;
+	object-fit: contain;
+}
+
+.profilePict {
+	border: 1px solid black;
+	width: 140px;
+	height: 140px;
+}
+
+.profileDll {
+	padding-left: 20px;
+	width: 180px;
+}
+
+.profileButton {
+	width: 80px;
+}
+
+.hideButton {
+	margin-left: 100px; 
+	margin-bottom: 80px;
+	width: 80px; 
+	height: 35px; 
+	background-color: #DA0026;
+ 	border-radius: 10px;
+  	border-color: #000000;
+  	cursor: pointer;
+
+}
+
+.currentDate {
+	color: #a6ada7;
+	font-family: "Arial";
+}
+
+.customerName {
+	font-size: 20px;
+	font-family: "Arial";
+
+}
+.tujuan {
+	font-size: 12px;
+	font-family: "Arial";
+}
+.rating .colorRating {
+	color: #f7b74a;
+}
+
+.comment {
+	font-size: 0.9em;
+}
+
+.comment .userComment {
+	padding-left: 10px;
+	font-size: 1em;
+}
+
+

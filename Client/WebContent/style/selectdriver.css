@@ -1,0 +1,61 @@
+.driverblock {
+	border: 1px solid black;
+	margin-bottom: 5px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
+.driverblock h2 {
+	margin-left: 10px;
+}
+
+.chosen_driver {
+	margin-left: 25px;
+}
+
+.chosen_driver table tr td img {
+	width: 110px;
+	height: 110px;
+	border: 1px solid black;
+}
+
+.title_driver {
+	margin-top: 10px;
+}
+
+#driver_identification {
+	position: relative;
+	bottom: 10px;
+	padding-left: 10px;
+}
+
+#driver_identification #driver_name {
+	font-size: 1.5em;
+}
+
+#driver_identification #driver_rating {
+	color: orange;
+}
+
+#driver_identification form button {
+	position: relative;
+	top: 20px;
+	left: 160%;
+	background-color:  #66cc00;
+	border-radius: 9px;
+	border: 1px solid black;
+	padding: 8px 20px;
+}
+
+.chosen_driver {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.chosen_driver p {
+	color: grey;
+	font-size: 1.4em;
+	font-family: "Arial";
+	text-align: center;
+}

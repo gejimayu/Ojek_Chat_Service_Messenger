@@ -1,0 +1,109 @@
+body {
+	margin: 0 30%;
+}
+
+#logo {
+	margin-bottom: 0; 
+	padding-bottom: 0;
+	font-family: "Arial";
+}
+ 
+#labelgreen {
+	color: green;
+}
+
+#labelred {
+	color: red;
+}
+
+#hi_username {
+	float: right;
+	margin-bottom: 0;
+}
+
+#logout {
+	float: right;
+}
+
+#extralogo {
+	margin-top: 0; 
+	color: green;
+}
+
+#tableactivity, tr, #tableactivity tr td {
+	border: 1px solid black;
+}
+
+#tableactivity {
+	width: 100%;
+	border-collapse: collapse;
+	color: black;
+}
+
+#tableactivity tr td {
+	font-family: "Arial";
+	font-weight: bold;
+	text-align: center;
+	padding: 10px;
+	font-size: 1.5em;
+	width: 33.33%;
+}
+
+#makeanorder {
+	margin: 10px 0;
+	font-size: 2.5em;
+	font-weight: bold;
+	font-family: "Arial";
+	color: #212121;
+}
+
+.tableorder {
+	border-collapse: collapse;
+	display: inline-block;
+	width: 32%;
+	margin-bottom: 20px;
+}
+
+.tableorder tr td{
+	border-style: none;
+	padding: 3px;
+}
+
+.circle {
+	text-align: center;
+	padding:10px;
+	margin-right: 5px;
+	width: 10px;
+	height: 10px;
+	-webkit-border-radius: 100%;
+	-moz-border-radius: 100%;
+	border-radius: 100%;
+	background: rgb(192, 192, 192);
+}
+
+.titleorder {
+	width: 100px;
+}
+
+#current_order {
+	background-color: yellow;
+}
+
+#current_activity {
+	color: white;
+	background-color: #495A46;
+}
+
+.rest_activity {
+	color: black;
+}
+
+#current_activity a {
+	text-decoration: none;
+	color: white;
+}
+
+.rest_activity a {
+	text-decoration: none;
+	color: black;
+}

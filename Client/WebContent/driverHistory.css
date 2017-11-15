@@ -1,0 +1,116 @@
+body {
+	margin: 0 30%;
+	
+}
+
+#logo {
+	margin-bottom: 0; 
+	padding-bottom: 0;
+	font-family: "Arial";
+}
+ 
+#labelgreen {
+	color: green;
+}
+
+#labelred {
+	color: red;
+}
+
+#hi_username {
+	float: right;
+	margin-bottom: 0;
+}
+
+#logout {
+	float: right;
+}
+
+#extralogo {
+	margin-top: 0; 
+	color: green;
+}
+
+#tableactivity, tr, #tableactivity tr td {
+	border: 1px solid black;
+}
+
+#tableactivity {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#tableactivity tr td {
+	font-family: "Arial";
+	font-weight: bold;
+	text-align: center;
+	padding: 10px;
+	font-size: 1.5em;
+	width: 33.33%;
+}
+
+body #transactionHistory {
+	margin: 10px 0;
+	font-size: 2.5em;
+	font-weight: bold;
+	font-family: "Arial";
+	color: #212121;
+}
+
+#current_order {
+	background-color: yellow;
+}
+
+#tabelOrder {
+	border-style: solid; 
+	margin-bottom: 40px;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#tabelOrder #previousOrder {
+	border-style: thin;
+	border-color: #000000;
+}
+
+#tabelOrder #driverHistory {
+	border-style: thin;
+	border-color: #000000;
+}
+
+#tabelOrder tr td {
+	font-family: "Arial";
+	font-weight: bold;
+	text-align: center;
+	padding: 13px;
+	font-size: 1.3em;
+	width: 50%;
+}
+
+#tabelOrder a {
+	text-decoration: none;
+	color: black;
+}
+
+#driverHistory {
+	background-color: #6AC96B;
+}
+
+
+#current_activity {
+	background-color: #495A46;
+}
+
+#current_activity a {
+	text-decoration: none;
+	color: white;
+}
+
+.rest_activity a {
+	text-decoration: none;
+	color: black;
+}
+
+#previousOrder:hover {
+	background-color: yellow;
+}
