@@ -50,6 +50,7 @@
 
 </head>
 <body>
+	<%@ include file =  "userAgenInfo.jsp" %>
 	<%
 	if (request.getParameter("username") != null) {
 		//retrieve data
@@ -59,7 +60,10 @@
 		String fullname = request.getParameter("fullname");
 		String phonenumber = request.getParameter("phonenumber");
 		String driverstatus = request.getParameter("driverstatus");
-		
+		//get user agent
+        String userAgent = getClientBrowser(request);
+        String userIpAddr = getClientIpAddr(request);
+        
 		//create SOAP object
 		OjekDataImplService service = new OjekDataImplService();
 		OjekData ps = service.getOjekDataImplPort();
@@ -74,6 +78,8 @@
 		account.put("username", username);
 		account.put("password", password);
 		account.put("email", email);
+		account.put("browser", userAgent);
+		account.put("ipaddr", userIpAddr);
 		String sendme = account.toString();
 		
 		//send post request

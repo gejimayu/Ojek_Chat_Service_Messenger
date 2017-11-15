@@ -26,7 +26,3 @@ CREATE TABLE accesstoken (
 	token varchar(100),
 	expiretime DATETIME
 );
-
-INSERT INTO accesstoken
-VALUES  (1, "9be9a0968eb941e391f505523d8a8a49", '2017-10-07 23:52:10'),
-		(2, "23c41f6f92d642e490eaf5e5797e57bb", '2017-10-07 22:51:55');

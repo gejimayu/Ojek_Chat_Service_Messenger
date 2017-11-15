@@ -64,7 +64,7 @@ public class TokenControllerImpl implements TokenController{
 			e1.printStackTrace();
 		}
 		
-		String query = "SELECT * FROM accesstoken WHERE token = '"+ token +"' AND expiretime = '"+ expirytime +"'";
+		String query = "SELECT * FROM accesstoken WHERE token = '"+ token +"'";
 		execute(query);
 		try {
 			if (rs.next()) { //token validated

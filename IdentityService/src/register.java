@@ -40,6 +40,8 @@ public class register extends HttpServlet {
 		String password = null;
 		String phonenumber = null;
 		String driverstatus = null;
+		String browser = null;
+		String ipaddr = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//get current time
 		Date date = new Date();
@@ -60,7 +62,9 @@ public class register extends HttpServlet {
 			JSONObject jsonObject = new JSONObject(jsonData); // put "String"
 			username = jsonObject.getString("username");
 			email = jsonObject.getString("email");
-			password = jsonObject.getString("password");		
+			password = jsonObject.getString("password");
+			browser = jsonObject.getString("browser");
+			ipaddr = jsonObject.getString("ipaddr");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -92,6 +96,7 @@ public class register extends HttpServlet {
 	    	stmt.executeUpdate("INSERT INTO userdata (username, email, password) VALUES ('"+username+"', '"+email+"', '"+password+"')");
 	    	UUID uuid = UUID.randomUUID();
 	        String usertoken = uuid.toString().replace("-", "");
+	        usertoken += "#" + browser + "#" + ipaddr;
 	        // Execute Insert Query
 	        rs = stmt.executeQuery("SELECT id_user FROM userdata WHERE username = '" + username + "'");
 	        if (rs.next()) {
@@ -136,5 +141,4 @@ public class register extends HttpServlet {
 	        } //end finally try
 	    }
 	}
-
 }
