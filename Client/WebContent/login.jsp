@@ -26,16 +26,22 @@
     <script src="assets/javascript/login.js"></script>
 </head>
 <body>
+	<%@ include file =  "userAgenInfo.jsp" %>
 	<%
 	if (request.getParameter("username") != null) {
 		//retrieve data
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		//get user agent
+        String userAgent = getClientBrowser(request);
+        String userIpAddr = getClientIpAddr(request);
 		
 		//make json object
 		JSONObject account = new JSONObject();
 		account.put("username", username);
 		account.put("password", password);
+		account.put("browser", userAgent);
+		account.put("ipaddr", userIpAddr);
 		String sendme = account.toString();
 		
 		//send post request
