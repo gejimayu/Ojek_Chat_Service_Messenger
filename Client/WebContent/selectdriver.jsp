@@ -147,7 +147,8 @@
 							<span id='driver_name'><%= hasil.get("name")  %></span><br>
 							<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
 							(<%= hasil.get("num_votes") %> votes) <br>
-							<form action='completeorder.jsp' method='POST'>
+							<form action='http://localhost:8085/token.jsp' method='POST'>
+								<input type="hidden" name="userid" value="<%= userid %>"/>
 								<button name='driverid' value='<%=hasil.get("id_driver")%>'>I CHOOSE YOU!</button>
 							</form>
 						</td>
