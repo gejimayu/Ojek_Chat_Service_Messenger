@@ -5,6 +5,7 @@
 <%@ page import="org.java.ojekonline.webservice.OjekData" %>
 <%@ page import="org.java.ojekonline.webservice.OjekDataImplService" %>
 <%@ page import="org.java.ojekonline.webservice.Babi" %>
+<%@ page import="org.java.ojekonline.webservice.Profile" %>
 <%@ page import="org.java.ojekonline.webservice.MapElementsArray" %>
 <%@ page import="org.java.ojekonline.webservice.MapElements" %>
 <%@ page import = "java.util.Date"%>
@@ -46,6 +47,13 @@
 		}
 		System.out.println(userid);
 		String nameuser = ps.getNameUser(userid);
+		Profile profil = ps.getProfileInfo(userid);
+		if (profil.getDriver().equals("true")) {
+			response.setStatus(response.SC_MOVED_TEMPORARILY);
+			response.setHeader("Location", "http://localhost:8080/Client/findorder.jsp");
+		}
+		
+		//if there's a request
 		if (request.getParameter("pick") != null && request.getParameter("dest") != null 
 				&& request.getParameter("driverid") != null) {
 			

@@ -69,3 +69,39 @@
 [info] i  hosting: Serving hosting files from: ./
 [info] +  hosting: Local server: http://localhost:8085
 
+[debug] [2017-11-18T06:29:33.819Z] ----------------------------------------------------------------------
+[debug] [2017-11-18T06:29:33.823Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\asus\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve -p 8085
+[debug] [2017-11-18T06:29:33.824Z] CLI Version:   3.15.1
+[debug] [2017-11-18T06:29:33.824Z] Platform:      win32
+[debug] [2017-11-18T06:29:33.824Z] Node Version:  v8.9.1
+[debug] [2017-11-18T06:29:33.824Z] Time:          Sat Nov 18 2017 13:29:33 GMT+0700 (SE Asia Standard Time)
+[debug] [2017-11-18T06:29:33.824Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-11-18T06:29:33.844Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-11-18T06:29:33.844Z] > authorizing via signed-in user
+[debug] [2017-11-18T06:29:33.848Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-11-18T06:29:33.848Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/QWQn8COgDrzV4eNqXjdG9RS1c18bYmKhJwg24DAdd7g',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Sat Nov 18 2017 13:29:33 GMT+0700 (SE Asia Standard Time)
+[debug] [2017-11-18T06:29:34.082Z] <<< HTTP RESPONSE 200
+[debug] [2017-11-18T06:29:34.926Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/wbdojek  
+ Sat Nov 18 2017 13:29:34 GMT+0700 (SE Asia Standard Time)
+[debug] [2017-11-18T06:29:35.949Z] <<< HTTP RESPONSE 200
+[debug] [2017-11-18T06:29:35.952Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/wbdojek/tokens  
+ Sat Nov 18 2017 13:29:35 GMT+0700 (SE Asia Standard Time)
+[debug] [2017-11-18T06:29:36.999Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'D:\EclipseApps\Client\WebContent'...
+[info] 
+[debug] [2017-11-18T06:29:37.009Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/wbdojek  
+ Sat Nov 18 2017 13:29:37 GMT+0700 (SE Asia Standard Time)
+[debug] [2017-11-18T06:29:38.284Z] <<< HTTP RESPONSE 200
+[debug] [2017-11-18T06:29:38.285Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/1084102565082/clients/_:getWebAppConfig  
+ Sat Nov 18 2017 13:29:38 GMT+0700 (SE Asia Standard Time)
+[debug] [2017-11-18T06:29:39.073Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: ./
+[info] +  hosting: Local server: http://localhost:8085
+

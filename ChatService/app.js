@@ -1,16 +1,11 @@
-var express = require('express'),
-	app = express(),
-	mongoose = require('mongoose'),
-	bodyParser = require('body-parser');
+var express 		= require('express'),
+	app 			= express(),
+	mongoose 		= require('mongoose'),
+	bodyParser 		= require('body-parser'),
+	Driver 			= require('./models/driverfindingorder.js'),
+	Token 			= require('./models/token.js');
 
 mongoose.connect('mongodb://localhost/chatojek');
-
-var driverSchema = mongoose.Schema({
-	id_driver: Number,
-	locations: [String]
-});
-
-var Driver = mongoose.model("Driver", driverSchema);
 
 app.use(bodyParser.json()); 
 // for parsing application/xwww-form-urlencoded
@@ -27,6 +22,20 @@ app.post('/storedriver', function(req, res){
 		locations: req.body.locations
 	});
 	newDriver.save((err, saved) => {
+		if (err)
+			res.send("error");
+		console.log(saved);
+	});
+	res.send("received");
+});
+
+app.post('/storetoken', function(req, res){
+	console.log(req.body);
+	var newToken = new Token({
+		id_user: req.body.id_user,
+		token: req.body.token
+	});
+	newToken.save((err, saved) => {
 		if (err)
 			res.send("error");
 		console.log(saved);

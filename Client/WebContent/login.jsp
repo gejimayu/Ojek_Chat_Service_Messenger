@@ -77,7 +77,7 @@
 			session.setAttribute("expiry_time", expiry_time);
 			//redirect
 	        response.setStatus(response.SC_MOVED_TEMPORARILY);
-	        response.setHeader("Location", "http://localhost:8080/Client/selectdestination.jsp");
+	        response.setHeader("Location", "http://localhost:8085/token.jsp");
 		} else {
 		    %> <script> alert("Wrong password / username") </script> <%
 		}  
