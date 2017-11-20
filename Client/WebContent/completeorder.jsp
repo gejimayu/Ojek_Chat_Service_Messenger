@@ -109,7 +109,7 @@
 	
 		<%	} %>
 	
-		<form action="selectdestination.jsp" method="POST" onsubmit="return validateForm2()">
+		<form action="save_order.jsp" method="POST" onsubmit="return validateForm2()">
 		    <div class="rate">
 		        <input type="radio" id="star5" name="rate" value="5" /><label for="star5" title="text">5 stars</label>
 		        <input type="radio" id="star4" name="rate" value="4" /><label for="star4" title="text">4 stars</label>

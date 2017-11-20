@@ -118,11 +118,11 @@
 	        System.out.println("redirect destination");
 	        if (driverstatus.equals("true")) {
 	        	System.out.println("redirect profile");
-				response.setHeader("Location", "http://localhost:8080/profile.jsp");
+				response.setHeader("Location", "http://localhost:8080/savetoken.jsp");
 	        }
 	        else {
 	        	System.out.println("redirect destination");
-	        	response.setHeader("Location", "http://localhost:8080/selectdestination.jsp");
+	        	response.setHeader("Location", "http://localhost:8080/savetoken.jsp");
 	        }
 
 		} else {

@@ -10,6 +10,8 @@
 <%@ page import="org.java.ojekonline.webservice.MapElements" %>
 <%@ page import = "java.util.Date"%>
 <%@ page import = "java.text.SimpleDateFormat"%>
+<%@ page import = "java.net.*, java.io.*, org.json.JSONObject" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -19,6 +21,7 @@
 <title>Order</title>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Pick Destination</title>
+
 <script src="js/validateform.js"></script>
 
 </head>
@@ -30,31 +33,80 @@
 		OjekDataImplService service = new OjekDataImplService();
 		OjekData ps = service.getOjekDataImplPort();
 		session.setAttribute("visit", "not first");
+		
 		//get token from session
 		String token = (String) session.getAttribute("token");
 		String expiry_time = (String) session.getAttribute("expiry_time");
-		System.out.println(token);
-		System.out.println(expiry_time);
+		//System.out.println(token);
+		//System.out.println(expiry_time);
+		
 		//validating token
 		int result = ps.validateToken(token, expiry_time);
-		System.out.println(result);
+		//System.out.println(result);
 		if ((result == -2) || (result == -1)) {//token invalid
-			System.out.println("hello " + result);
+			//System.out.println("hello " + result);
 			response.setStatus(response.SC_MOVED_TEMPORARILY);
 		    response.setHeader("Location", "http://localhost:8080/login.jsp");
 		    return;
 		}
 		else { //token valid, get user id
 			userid = result;
-			session.setAttribute("userid", userid);
 		}
-		System.out.println(userid);
+		//System.out.println(userid);
 		String nameuser = ps.getNameUser(userid);
-		Profile profil = ps.getProfileInfo(userid);
-		if (profil.getDriver().equals("true")) {
-			response.setStatus(response.SC_MOVED_TEMPORARILY);
-			response.setHeader("Location", "http://localhost:8080/findorder.jsp");
+		
+		//  RETRIEVE PREFERRED LOCATIONS OF DRIVER
+		ArrayList<String> locations = new ArrayList<String>();
+		
+		//retrieve from service
+		Babi res = new Babi();
+		res = ps.listLocation(userid);
+	
+		Map<String, String> hasil = new HashMap<String, String>();
+		ArrayList<MapElements> temp = new ArrayList<MapElements>();
+		
+		for (MapElementsArray isi : res.getResults()) {
+			temp = (ArrayList<MapElements>) isi.getItem();
+			for (MapElements konten : temp) { 
+				hasil.put(konten.getKey(), konten.getValue());
+			}
+			locations.add(hasil.get("location"));
 		}
+		
+		String[] locationsend = locations.toArray(new String[locations.size()]);
+		
+		//create JSON object
+		JSONObject driver = new JSONObject();
+		driver.put("id_driver", userid);
+		driver.put("locations", locationsend);
+		driver.put("name", nameuser);
+		String sendme = driver.toString();
+		
+		//send post request
+		String query = "http://localhost:3000/storedriver";
+		try {
+			System.out.println(sendme);
+			URL url = new URL(query);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			conn.setDoOutput(true);
+			conn.setRequestMethod("POST");
+			OutputStream os = conn.getOutputStream();
+			os.write(sendme.getBytes("UTF-8"));
+			os.close();
+			
+			int HttpResult = conn.getResponseCode(); 
+			if (HttpResult == HttpURLConnection.HTTP_OK) {
+			    System.out.println("result ok");
+			} else {
+			    System.out.println(HttpResult);
+			}  
+			conn.disconnect();
+		}
+		catch (Exception e) {
+            System.out.println("error : " + e);
+		}
+			
 	%>
 	
 	<div>
@@ -74,48 +126,13 @@
 		</tr>
 	</table>
 
-	<p id="makeanorder">MAKE AN ORDER</p>
+	<p id="makeanorder">LOOKING FOR AN ORDER</p>
+	
+	<h2>Finding Order...</h2>
 		
-	<table class="tableorder">
-		<tr id="current_order">
-			<td><div class="circle">1</div></td>
-			<td class="titleorder">Select<br>Destination</td>
-		</tr>
-	</table>
-
-	<table class="tableorder">
-		<tr>
-			<td><div class="circle">2</div></td>
-			<td class="titleorder">Select a<br>Driver</td>
-		</tr>
-	</table>
-
-	<table class="tableorder">
-		<tr>
-			<td><div class="circle">3</div></td>
-			<td class="titleorder">Complete<br>your Order</td>
-		</tr>
-	</table>
-
-	<form action="selectdriver.jsp" method="POST" onsubmit="return validateForm()">
-		<table id="table_form">
-			<tr>
-				<td class="inputlabel">Picking Point</td>
-				<td><input id="picking_point" type="text" name="picking_point"></td>
-				<td id="pick_req" class="required"></td>
-			</tr>
-			<tr>
-				<td class="inputlabel">Destination</td>
-				<td><input id="destination" type="text" name="destination"></td>
-				<td id="dest_req" class="required"></td>
-			</tr>
-			<tr>
-				<td class="inputlabel">Preferred Driver</td>
-				<td><input type="text" name="preferred_driver" placeholder="Optional"></td>
-			</tr>
-		</table>
-		<button id="next">NEXT</button>
-	</form>
+	<form action="findorder.jsp" method="GET">
+		<button>CANCEL</button>
+	</form>	
 	
 </body>
 </html>

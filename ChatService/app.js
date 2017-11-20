@@ -20,7 +20,8 @@ app.post('/storedriver', function(req, res){
 	console.log(req.body);
 	var newDriver = new Driver({
 		id_driver: req.body.id_driver,
-		locations: req.body.locations
+		locations: req.body.locations,
+		name: req.body.name
 	});
 	newDriver.save((err, saved) => {
 		if (err)
@@ -43,6 +44,31 @@ app.post('/storetoken', function(req, res){
 	});
 	res.send("received");
 });
+
+app.post('/selectprefdriver', function(req, res){
+	var to = req.body.destination;
+	var drivername = req.body.preferred_driver;
+	Driver.find({ $and : [{name: drivername}, {locations: to}] }, function(err, response){
+		if (err)
+			console.log(err);
+		else {
+			console.log(response);
+		}
+	});
+})
+
+app.post('/deletetoken', function(req, res){
+	var userid = req.body.id_user;
+	Token.findOneAndRemove({id_user: userid}, function(err, response) {
+		if (err)
+			console.log(err);
+		else {
+			console.log(userid + " deleted");
+		}
+	});
+	res.send("good");
+});
+
 
 app.post('/sendchat', function(req, res){
 	console.log(req.body);
