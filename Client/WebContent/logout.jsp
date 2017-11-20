@@ -14,7 +14,6 @@
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 		conn.setDoOutput(true);
-		conn.setDoInput(true);
 		conn.setRequestMethod("POST");
 		OutputStream os = conn.getOutputStream();
 		os.write(sendme.getBytes("UTF-8"));
@@ -24,7 +23,6 @@
 		JSONObject useracc = new JSONObject();
 		useracc.put("id_user", userid);
 		sendme = useracc.toString();
-		System.out.println("kontol : " + sendme);
 		
 		//send 2nd post request
 		query = "http://localhost:3000/deletetoken";

@@ -8,6 +8,7 @@
 <%@ page import="org.java.ojekonline.webservice.MapElementsArray" %>
 <%@ page import="org.java.ojekonline.webservice.MapElements" %>
 <%@ page import = "java.util.ArrayList"%>
+<%@ page import = "java.net.*, java.io.*, org.json.JSONObject" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -128,6 +129,55 @@
 		<div class="chosen_driver">
 		
 		<%
+			//make json object
+			JSONObject useracc = new JSONObject();
+			useracc.put("destination", dest);
+			String sendme = useracc.toString();
+			
+			//send post request
+			String query = "http://localhost:3000/selectdriver";
+			URL url = new URL(query);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			conn.setDoOutput(true); conn.setDoInput(true);
+			conn.setRequestMethod("POST");
+			OutputStream os = conn.getOutputStream();
+			os.write(sendme.getBytes("UTF-8"));
+			os.close();
+			
+			// read the response
+			StringBuilder sb = new StringBuilder();  
+			int HttpResult = conn.getResponseCode(); 
+			if (HttpResult == HttpURLConnection.HTTP_OK) {
+			    BufferedReader br = new BufferedReader(
+			            new InputStreamReader(conn.getInputStream(), "utf-8"));
+			    String line = null;  
+			    while ((line = br.readLine()) != null) {  
+			        sb.append(line + "\n");  
+			    }
+			    br.close();
+			    //System.out.println("" + sb.toString());  
+			    JSONObject jsonObject = new JSONObject(sb.toString());
+			    
+			    //extract token
+				String token = jsonObject.getString("token");
+				String expiry_time = jsonObject.getString("expiry_time");
+				session.setAttribute("token", token);
+				session.setAttribute("expiry_time", expiry_time);
+				//redirect
+		        response.setStatus(response.SC_MOVED_TEMPORARILY);
+		        System.out.println("redirect destination");
+		        if (driverstatus.equals("true")) {
+		        	System.out.println("redirect profile");
+					response.setHeader("Location", "http://localhost:8080/savetoken.jsp");
+		        }
+		        else {
+		        	System.out.println("redirect destination");
+		        	response.setHeader("Location", "http://localhost:8080/savetoken.jsp");
+		        }
+			}
+		
+		
 			res = new Babi();
 			res = ps.findDriver(userid, pick, dest);
 	

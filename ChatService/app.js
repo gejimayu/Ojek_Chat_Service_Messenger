@@ -47,12 +47,23 @@ app.post('/storetoken', function(req, res){
 
 app.post('/selectprefdriver', function(req, res){
 	var to = req.body.destination;
-	var drivername = req.body.preferred_driver;
-	Driver.find({ $and : [{name: drivername}, {locations: to}] }, function(err, response){
+	var drivername = req.body.name;
+	Driver.findOne({ $and : [{name: drivername}, {locations: to}] }, function(err, response){
 		if (err)
 			console.log(err);
 		else {
-			console.log(response);
+			res.send(response);
+		}
+	});
+})
+
+app.post('/selectdriver', function(req, res){
+	var to = req.body.destination;
+	Driver.find({locations: to}, function(err, response){
+		if (err)
+			console.log(err);
+		else {
+			res.send(response);
 		}
 	});
 })
@@ -60,6 +71,18 @@ app.post('/selectprefdriver', function(req, res){
 app.post('/deletetoken', function(req, res){
 	var userid = req.body.id_user;
 	Token.findOneAndRemove({id_user: userid}, function(err, response) {
+		if (err)
+			console.log(err);
+		else {
+			console.log(userid + " deleted");
+		}
+	});
+	res.send("good");
+});
+
+app.post('/deletefindingdriver', function(req, res){
+	var userid = req.body.id_user;
+	Driver.findOneAndRemove({id_driver: userid}, function(err, response) {
 		if (err)
 			console.log(err);
 		else {
