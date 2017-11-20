@@ -116,7 +116,15 @@
 			//redirect
 	        response.setStatus(response.SC_MOVED_TEMPORARILY);
 	        System.out.println("redirect destination");
-	        response.setHeader("Location", "http://localhost:8085/token.jsp");
+	        if (driverstatus.equals("true")) {
+	        	System.out.println("redirect profile");
+				response.setHeader("Location", "http://localhost:8080/profile.jsp");
+	        }
+	        else {
+	        	System.out.println("redirect destination");
+	        	response.setHeader("Location", "http://localhost:8080/selectdestination.jsp");
+	        }
+
 		} else {
 		    %> <script> alert("Username or email is already used") </script> <%
 		}  
