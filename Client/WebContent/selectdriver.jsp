@@ -143,7 +143,7 @@
 									<span id='driver_name'><%= hasil.get("name")  %></span><br>
 									<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
 									(<%= hasil.get("num_votes") %> votes) <br>
-									<form action='http://localhost:8080/chat.jsp' method='POST'>
+									<form action='http://localhost:8080/userchat.jsp' method='POST'>
 										<input type="hidden" name="pick" value="<%=pick%>">
 										<input type="hidden" name="dest" value="<%=dest%>">
 										<button name='driverid' value='<%=hasil.get("id_driver")%>'>I CHOOSE YOU!</button>
@@ -225,7 +225,7 @@
 										<span id='driver_name'><%= hasil.get("name") %></span><br>
 										<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
 										(<%= hasil.get("num_votes") %> votes) <br>
-										<form action='http://localhost:8080/chat.jsp' method='POST'>
+										<form action='http://localhost:8080/userchat.jsp' method='POST'>
 											<input type="hidden" name="userid" value="<%= userid %>"/>
 											<button name='driverid' value='<%=hasil.get("id_driver")%>'>I CHOOSE YOU!</button>
 										</form>
@@ -236,6 +236,7 @@
 				    }
 			    }
 			}
+			conn.disconnect();
 		%>
 		
 		</div>

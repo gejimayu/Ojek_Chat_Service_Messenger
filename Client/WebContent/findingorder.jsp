@@ -12,6 +12,10 @@
 <%@ page import = "java.text.SimpleDateFormat"%>
 <%@ page import = "java.net.*, java.io.*, org.json.JSONObject" %>
 
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -108,6 +112,40 @@
 		}
 			
 	%>
+	
+	<script>
+		var config = {
+			    apiKey: "AIzaSyAITe42GKTLwVBNZd3LUAwF5kDR-C1LBqc",
+			    authDomain: "wbdojek.firebaseapp.com",
+			    databaseURL: "https://wbdojek.firebaseio.com",
+			    projectId: "wbdojek",
+			    storageBucket: "wbdojek.appspot.com",
+			    messagingSenderId: "1084102565082"
+			  };
+	
+		firebase.initializeApp(config);
+	
+		if ('serviceWorker' in navigator){
+		    console.log("SW present !!! ");
+	
+		    navigator.serviceWorker.register('firebase-messaging-sw.js', {
+		      //scope: '/toto/'
+		    }).then(function(registration){
+		      console.log('Service worker registered : ', registration.scope);
+		    })
+		    .catch(function(err){
+		      console.log("Service worker registration failed : ", err);
+		    });
+	
+		}
+	
+		const messaging = firebase.messaging();
+		
+		messaging.onMessage(function(payload) {
+			  console.log("Message received. ", payload);
+			  window.location.replace("driverchat.jsp");
+		});
+	</script>
 	
 	<div>
 		<p id="hi_username">Hi, <b> <%= nameuser %></b> !</p>

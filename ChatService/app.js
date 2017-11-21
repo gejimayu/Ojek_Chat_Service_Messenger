@@ -3,8 +3,9 @@ var express 		= require('express'),
 	mongoose 		= require('mongoose'),
 	bodyParser 		= require('body-parser'),
 	Driver 			= require('./models/driverfindingorder.js'),
-	Token 			= require('./models/token.js');
-	Chat			= require('./models/chat.js')
+	Token 			= require('./models/token.js'),
+	Chat			= require('./models/chat.js'),
+	request			= require('request');
 
 mongoose.connect('mongodb://localhost/chatojek');
 
@@ -94,79 +95,58 @@ app.post('/deletefindingdriver', function(req, res){
 
 
 app.post('/sendchat', function(req, res){
-	console.log(req.body);
 	var newChat = new Chat({
 		id_sender: req.body.id_sender,
 		id_receiver: req.body.id_receiver,
 		message: req.body.message
 	});
-	var recv_token = findToken(newChat.id_receiver);
-	sendRequestToFCM(recv_token, newChat.message);
-	newChat.save((err, saved) => {
-		if (err)
-			res.send("error");
-		console.log(saved);
-	});
-	res.send("success");
-});
+	console.log(newChat);
 
-function findToken(id_receiver) {
-	Token.find({ id_user: id_receiver }, 'token', function (err, result) {
+	Token.findOne({ id_user: newChat.id_receiver }, function (err, result) {
 		if (err) {
 			console.log("token not exist");
-			return;
+			return null;
 		}
-		return result.token;
+		else {
+			if (result != null) {
+				var key = 'AAAA_GmMXNo:APA91bHPCn5TqamLyqh8Fpw0mjP78qrDQpOw1HE0jNCLP8SV7PXHzJYb_0cX4xRWAF8jHQsoF0rNMQS0LHK-De1kkx9YsC_ifYj62iVQ9tcew9S9In3jXSHI118sifj1uJAHJVHQjHvb';
+			
+				var sendme = {
+					'notification': {'title': 'New Message', 'body': newChat.message},
+					'to': result.token
+				};
+				var options = {
+					url: 'https://fcm.googleapis.com/fcm/send',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': 'key=' + key
+					},
+					body: JSON.stringify(sendme)
+				};
+
+				console.log(options);
+
+				request.post(options, 
+				    function (error, response, body) {
+				        if (!error && response.statusCode == 200) {
+				            console.log("successfully sent");
+				            newChat.save((err, saved) => {
+								if (err)
+									res.send("error");
+								console.log("inidia : " + saved);
+							});
+				        }
+				        else {
+				        	console.log(response.statusCode);
+				        }
+				    }
+				);
+				res.send("succeded");
+			}
+			else
+				res.send("failed");
+		}
 	});
-}
-
-function sendRequestToFCM(recv_token, message) {
-	var key = 'YOUR-SERVER-KEY';
-	var to = 'YOUR-IID-TOKEN';
-	var notification = {
-	  'title': 'New Message',
-	  'body': message,
-	  'click_action': 'http://localhost:8085' //gk tau ini apaan
-	};
-
-	fetch('https://fcm.googleapis.com/fcm/send', {
-	  'method': 'POST',
-	  'headers': {
-	    'Authorization': 'key=' + key,
-	    'Content-Type': 'application/json'
-	  },
-	  'body': JSON.stringify({
-	    'notification': notification,
-	    'to': to
-	  })
-	}).then(function(response) {
-	  console.log(response);
-	}).catch(function(error) {
-	  console.error(error);
-	})
-}
-
-function post(path, params, method) {
-    method = method || "post"; // Set method to post by default if not specified.
-
-    // The rest of this code assumes you are not using a library.
-    // It can be made less wordy if you use one.
-    var form = document.createElement("form");
-    form.setAttribute("method", method);
-    form.setAttribute("action", path);
-
-    for(var key in params) {
-        if(params.hasOwnProperty(key)) {
-            var hiddenField = document.createElement("input");
-            hiddenField.setAttribute("type", "hidden");
-            hiddenField.setAttribute("name", key);
-            hiddenField.setAttribute("value", params[key]);
-
-            form.appendChild(hiddenField);
-        }
-    }
-    document.body.appendChild(form);
-    form.submit();
-}
+});
 
 app.listen(3000);
