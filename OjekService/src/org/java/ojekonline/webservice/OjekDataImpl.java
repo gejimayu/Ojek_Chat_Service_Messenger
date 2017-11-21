@@ -87,16 +87,15 @@ public class OjekDataImpl implements OjekData {
 	}
 	
 	@Override
-	public Babi findDriver(int id_user, String pick, String dest) {
+	public Babi findDriver(int id_driver) {
 	    ArrayList<Map<String, String>> smth = new ArrayList<Map<String, String>>();
 		try {
 			String query = 
-					"SELECT DISTINCT name, prof_pic, avgrating, "
+					"SELECT name, prof_pic, avgrating, "
 					+ "id_driver, num_votes FROM driver NATURAL JOIN pref_location "
-					+ "join user WHERE id_user <> "+ Integer.toString(id_user) +" AND id_user = id_driver AND" + 
-					"( '" + pick + "' = location OR '" +  dest + "' = location)";
+					+ "join user WHERE id_user = "+ Integer.toString(id_driver) +" AND id_user = id_driver";
 			execute(query, 1);
-			while (rs.next()) {
+			if (rs.next()) {
 				System.out.println(rs.getString("name"));
 				Map<String, String> temp = new HashMap<String, String>();
 				temp.put("name", rs.getString("name"));
@@ -135,41 +134,6 @@ public class OjekDataImpl implements OjekData {
 		} 
         
 		return result;
-	}
-
-	@Override
-	public Babi findPrefDriver(int id_user, String name) {
-		ArrayList<Map<String, String>> smth = new ArrayList<Map<String, String>>();
-		try {
-			String query = 
-					"SELECT DISTINCT name, prof_pic, avgrating, "
-					+ "id_driver, num_votes FROM driver join "
-					+ " user WHERE id_user <> "+ Integer.toString(id_user) +" AND name =  "
-							+ "'"+ name + "' AND id_driver = id_user";
-			execute(query, 1);
-			if (rs.next()) {
-				System.out.println(rs.getString("name"));
-				Map<String, String> temp = new HashMap<String, String>();
-				temp.put("name", rs.getString("name"));
-				temp.put("prof_pic", rs.getString("prof_pic"));
-				temp.put("avgrating", Float.toString(rs.getFloat("avgrating")));
-				temp.put("id_driver", Integer.toString(rs.getInt("id_driver")));
-				temp.put("num_votes", Integer.toString(rs.getInt("num_votes")));
-				smth.add(temp);
-			}
-			
-			 stmt.close();
-		     conn.close();
-		} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				System.out.println("asem");
-				e.printStackTrace();
-		}
-	
-		Babi kampret = new Babi();
-		kampret.setResults(smth);
-		
-		return kampret;
 	}
 
 	@Override

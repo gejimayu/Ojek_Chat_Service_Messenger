@@ -5,10 +5,11 @@
 <%@ page import="org.java.ojekonline.webservice.OjekData" %>
 <%@ page import="org.java.ojekonline.webservice.OjekDataImplService" %>
 <%@ page import="org.java.ojekonline.webservice.Babi" %>
+<%@ page import="org.java.ojekonline.webservice.Profile" %>
 <%@ page import="org.java.ojekonline.webservice.MapElementsArray" %>
 <%@ page import="org.java.ojekonline.webservice.MapElements" %>
 <%@ page import = "java.util.ArrayList"%>
-<%@ page import = "java.net.*, java.io.*, org.json.JSONObject" %>
+<%@ page import = "java.net.*, java.io.*, org.json.JSONObject, org.json.JSONArray" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -90,37 +91,71 @@
 		<div class="chosen_driver">
 		
 		<%
-			Babi res = new Babi();
-			System.out.println(prefdriver);
-			res = ps.findPrefDriver(userid, prefdriver);
-		
-			Map<String, String> hasil = new HashMap<String, String>();
-			
-			ArrayList<MapElements> temp = new ArrayList<MapElements>();
-			for (MapElementsArray isi : res.getResults()) {
-				temp = (ArrayList<MapElements>) isi.getItem();
-				for (MapElements konten : temp) { 
-					hasil.put(konten.getKey(), konten.getValue());
-				}
-				%>
-			
-				<table>
-					<tr>
-						<td><img src='<%= hasil.get("prof_pic")  %>'></td>
-						<td id='driver_identification'>
-							<span id='driver_name'><%= hasil.get("name")  %></span><br>
-							<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
-							(<%= hasil.get("num_votes") %> votes) <br>
-							<form action='http://localhost:8085/token.jsp' method='POST'>
-								<input type="hidden" name="pick" value="<%=pick%>">
-								<input type="hidden" name="dest" value="<%=dest%>">
-								<button name='driverid' value='<%=hasil.get("id_driver")%>'>I CHOOSE YOU!</button>
-							</form>
-						</td>
-					</tr>
-				</table>	
+			//make json object
+			JSONObject useracc = new JSONObject();
+			useracc.put("destination", dest);
+			useracc.put("name", prefdriver);
+			String sendme = useracc.toString();
+			System.out.println("kirimgan " + sendme);
+			//send post request
+			String query = "http://localhost:3000/selectprefdriver"; URL url = new URL(query);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			conn.setDoOutput(true); conn.setDoInput(true); conn.setRequestMethod("POST");
+			OutputStream os = conn.getOutputStream();
+			os.write(sendme.getBytes("UTF-8"));
+			os.close();
+			// read the response
+			StringBuilder sb = new StringBuilder();  
+			int HttpResult = conn.getResponseCode();
+			if (HttpResult == HttpURLConnection.HTTP_OK) {
+			    BufferedReader br = new BufferedReader(
+			            new InputStreamReader(conn.getInputStream(), "utf-8"));
+			    String line = null;  
+			    while ((line = br.readLine()) != null) {  
+			        sb.append(line + "\n");  
+			    }
+			    br.close();
+			    System.out.println("hasilgan : " + sb.toString());  
 				
-		<%	} %>
+			    if (sb.length() > 0) { // no result
+			    	//extract JSON to get driver id
+				    JSONObject kehabisannama = new JSONObject(sb.toString());
+				    int driverid = kehabisannama.getInt("id_driver");
+				    
+				    //find profile of driver from ojek service
+					Babi res = new Babi();
+					res = ps.findDriver(driverid);
+				
+					Map<String, String> hasil = new HashMap<String, String>();
+					
+					ArrayList<MapElements> temp = new ArrayList<MapElements>();
+					for (MapElementsArray isi : res.getResults()) {
+						temp = (ArrayList<MapElements>) isi.getItem();
+						for (MapElements konten : temp) { 
+							hasil.put(konten.getKey(), konten.getValue());
+						}
+						%>
+						<table>
+							<tr>
+								<td><img src='<%= hasil.get("prof_pic")  %>'></td>
+								<td id='driver_identification'>
+									<span id='driver_name'><%= hasil.get("name")  %></span><br>
+									<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
+									(<%= hasil.get("num_votes") %> votes) <br>
+									<form action='http://localhost:8080/chat.jsp' method='POST'>
+										<input type="hidden" name="pick" value="<%=pick%>">
+										<input type="hidden" name="dest" value="<%=dest%>">
+										<button name='driverid' value='<%=hasil.get("id_driver")%>'>I CHOOSE YOU!</button>
+									</form>
+								</td>
+							</tr>
+						</table>	
+			    <%  }
+	
+				} 
+			}
+		%>
 		</div>
 	</div>
 	
@@ -130,82 +165,77 @@
 		
 		<%
 			//make json object
-			JSONObject useracc = new JSONObject();
+			useracc = new JSONObject();
 			useracc.put("destination", dest);
-			String sendme = useracc.toString();
+			sendme = useracc.toString();
 			
 			//send post request
-			String query = "http://localhost:3000/selectdriver";
-			URL url = new URL(query);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			query = "http://localhost:3000/selectdriver"; url = new URL(query);
+			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-			conn.setDoOutput(true); conn.setDoInput(true);
-			conn.setRequestMethod("POST");
-			OutputStream os = conn.getOutputStream();
+			conn.setDoOutput(true); conn.setDoInput(true); conn.setRequestMethod("POST");
+			os = conn.getOutputStream();
 			os.write(sendme.getBytes("UTF-8"));
 			os.close();
 			
+			//array for results
+			ArrayList<Integer> listdriver = new ArrayList<Integer>();
 			// read the response
-			StringBuilder sb = new StringBuilder();  
-			int HttpResult = conn.getResponseCode(); 
+			sb = new StringBuilder();  
+			HttpResult = conn.getResponseCode();
 			if (HttpResult == HttpURLConnection.HTTP_OK) {
-			    BufferedReader br = new BufferedReader(
+				BufferedReader br = new BufferedReader(
 			            new InputStreamReader(conn.getInputStream(), "utf-8"));
 			    String line = null;  
 			    while ((line = br.readLine()) != null) {  
 			        sb.append(line + "\n");  
 			    }
 			    br.close();
-			    //System.out.println("" + sb.toString());  
-			    JSONObject jsonObject = new JSONObject(sb.toString());
+			    System.out.println("hasilgan : " + sb.toString());  
 			    
-			    //extract token
-				String token = jsonObject.getString("token");
-				String expiry_time = jsonObject.getString("expiry_time");
-				session.setAttribute("token", token);
-				session.setAttribute("expiry_time", expiry_time);
-				//redirect
-		        response.setStatus(response.SC_MOVED_TEMPORARILY);
-		        System.out.println("redirect destination");
-		        if (driverstatus.equals("true")) {
-		        	System.out.println("redirect profile");
-					response.setHeader("Location", "http://localhost:8080/savetoken.jsp");
-		        }
-		        else {
-		        	System.out.println("redirect destination");
-		        	response.setHeader("Location", "http://localhost:8080/savetoken.jsp");
-		        }
+			    if (sb.length() > 0) {
+			    	JSONArray jsonArr = new JSONArray(sb.toString());
+				    
+				    //get element array of driver
+				    for (int i = 0; i < jsonArr.length(); i++) {
+				    	JSONObject jsonObject = jsonArr.getJSONObject(i);
+				    	listdriver.add(jsonObject.getInt("id_driver"));
+				    }
+				    
+				    //iterate through list of driver
+				    for(Integer id : listdriver) {
+					    Babi res = new Babi();
+						System.out.println(prefdriver);
+						res = ps.findDriver(id);
+					
+						//extract the results
+						Map<String, String> hasil = new HashMap<String, String>();
+						
+						ArrayList<MapElements> temp = new ArrayList<MapElements>();
+						for (MapElementsArray isi : res.getResults()) {
+							temp = (ArrayList<MapElements>) isi.getItem();
+							for (MapElements konten : temp) { 
+								hasil.put(konten.getKey(), konten.getValue());
+							}
+							%>
+							<table>
+								<tr>
+									<td><img src='<%= hasil.get("prof_pic") %>'></td>
+									<td id='driver_identification'>
+										<span id='driver_name'><%= hasil.get("name") %></span><br>
+										<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
+										(<%= hasil.get("num_votes") %> votes) <br>
+										<form action='http://localhost:8080/chat.jsp' method='POST'>
+											<input type="hidden" name="userid" value="<%= userid %>"/>
+											<button name='driverid' value='<%=hasil.get("id_driver")%>'>I CHOOSE YOU!</button>
+										</form>
+									</td>
+								</tr>
+							</table>
+					<% }
+				    }
+			    }
 			}
-		
-		
-			res = new Babi();
-			res = ps.findDriver(userid, pick, dest);
-	
-			hasil = new HashMap<String, String>();
-			
-			temp = new ArrayList<MapElements>();
-			for (MapElementsArray isi : res.getResults()) {
-				temp = (ArrayList<MapElements>) isi.getItem();
-				for (MapElements konten : temp) { 
-					hasil.put(konten.getKey(), konten.getValue());
-				} %>
-			
-				<table>
-					<tr>
-						<td><img src='<%= hasil.get("prof_pic")  %>'></td>
-						<td id='driver_identification'>
-							<span id='driver_name'><%= hasil.get("name")  %></span><br>
-							<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
-							(<%= hasil.get("num_votes") %> votes) <br>
-							<form action='http://localhost:8085/token.jsp' method='POST'>
-								<input type="hidden" name="userid" value="<%= userid %>"/>
-								<button name='driverid' value='<%=hasil.get("id_driver")%>'>I CHOOSE YOU!</button>
-							</form>
-						</td>
-					</tr>
-				</table>	
-				
-		<%	}
 		%>
 		
 		</div>

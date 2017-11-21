@@ -104,10 +104,12 @@
 		            traditional: true,
 		            success: function (data) {
 		            	<%  
-		            		if (profil.getDriver().equals("true"))
+		            		if (profil.getDriver().equals("true")) {
 		            			%>window.location.replace("profile.jsp");<%
-		            		else 
+		            		} 
+		            		else {
 		            			%>window.location.replace("selectdestination.jsp");<%
+		            		}
 		                %>
 		            }
 		        });
