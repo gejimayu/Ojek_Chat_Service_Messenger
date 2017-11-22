@@ -52,7 +52,7 @@
 	JSONObject useracc = new JSONObject();
 	useracc.put("id_sender", userid);
 	useracc.put("id_receiver", driverid);
-	useracc.put("message", "yoman");
+	useracc.put("message", userid);
 	String sendme = useracc.toString();
 	
 	//send post request

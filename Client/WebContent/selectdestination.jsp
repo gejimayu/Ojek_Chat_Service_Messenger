@@ -25,6 +25,7 @@
 <body>
 	<%
 		int userid = -1;
+		session.setAttribute("token", "dummy");
 		
 		//create service object
 		OjekDataImplService service = new OjekDataImplService();
