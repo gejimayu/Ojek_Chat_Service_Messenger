@@ -136,7 +136,24 @@
 					content: msg
 				});
 			};
+			//default post header
+			$http.defaults.headers.post['Content-Type'] = 'application-json/x-www-form-urlencoded;charset=utf-8';
+			//send login data
+			$http({
+		        method: 'POST',
+		        url: 'http://localhost:3000-/loadhistory',
+		        data: $.param({
+		            id_sender: req.body.id_sender,
+		            id_receiver: req.body.id_receiver
+		        }),
+		        headers: {'Content-Type': 'application-json/x-www-form-urlencoded'}
+		    }).success(function (data, status, headers, config) {
+		        // handle success things
+		    }).error(function (data, status, headers, config) {
+		        // handle error things
+		    });
 		});
+		}
 	</script>
 	
 	<table id="outerchatbox" ng-app = "chatApp" ng-controller = "chatController">
