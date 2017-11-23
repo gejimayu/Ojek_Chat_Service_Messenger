@@ -39,6 +39,6 @@
 		OjekData ps = service.getOjekDataImplPort();
 		ps.hideDriverHistory(Integer.parseInt(request.getParameter("id_history")));
 	%>
-	<script>window.location.href = "http://localhost:8080/Client/history-driver.jsp"</script>
+	<script>window.location.href = "http://localhost:8080/history-driver.jsp"</script>
 </body>
 </html>

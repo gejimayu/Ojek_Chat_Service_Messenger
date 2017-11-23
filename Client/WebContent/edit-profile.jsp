@@ -49,7 +49,7 @@
 	int result = ps.validateToken(token, expiry_time);
 	if ((result == -2) || (result == -1)) {//token invalid
 		response.setStatus(response.SC_MOVED_TEMPORARILY);
-	    response.setHeader("Location", "http://localhost:8080/Client/login.jsp");
+	    response.setHeader("Location", "http://localhost:8080/login.jsp");
 	    return;
 	}
 	else { //token valid, get user id

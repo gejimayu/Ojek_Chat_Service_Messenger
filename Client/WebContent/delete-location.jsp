@@ -49,7 +49,7 @@
 <body>
 <script>
 alert('Successfully deleted location!');
-window.location.href = "http://localhost:8080/Client/edit-location.jsp"
+window.location.href = "http://localhost:8080/edit-location.jsp"
 </script>
 </body>
 </html>

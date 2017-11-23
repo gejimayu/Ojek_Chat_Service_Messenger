@@ -2,14 +2,28 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="org.java.ojekonline.webservice.OjekData" %>
 <%@ page import="org.java.ojekonline.webservice.OjekDataImplService" %>
-
-<%
+<%@ page import = "java.net.*, java.io.*, org.json.JSONObject" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Chat</title>
+	<link rel="stylesheet" type="text/css" href="style/kepala.css">
+	<link rel="stylesheet" type="text/css" href="style/chatbox.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+	
+	<%
 		int userid = -1;
 		
 		//create service object
 		OjekDataImplService service = new OjekDataImplService();
 		OjekData ps = service.getOjekDataImplPort();
-		session.setAttribute("visit", "not first");
 		//get token from session
 		String token = (String) session.getAttribute("token");
 		String expiry_time = (String) session.getAttribute("expiry_time");
@@ -31,24 +45,33 @@
 		String nameuser = ps.getNameUser(userid);
 		String custid = request.getParameter("custid");
 		String namecust = ps.getNameUser(Integer.valueOf(custid));
-%>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+		
+		
+		//send 2nd post request to delete the driver's status of finding order
+		JSONObject useracc = new JSONObject();
+		useracc.put("id_user", userid);
+		String sendme = useracc.toString();
+		
+		String query = "http://localhost:3000/deletefindingdriver";
+		URL url = new URL(query);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+		conn.setDoOutput(true); conn.setDoInput(true);
+		conn.setRequestMethod("POST");
+		OutputStream os = conn.getOutputStream();
+		os.write(sendme.getBytes("UTF-8"));
+		os.close();
+		
+		int HttpResult = conn.getResponseCode(); 
+		if (HttpResult == HttpURLConnection.HTTP_OK) {
+			//redirect
+			System.out.println("oke boss");
+		} else {
+			System.out.println("jancuk");
+		}  
+		conn.disconnect();
+	%>
 	
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Chat</title>
-		<link rel="stylesheet" type="text/css" href="style/kepala.css">
-		<link rel="stylesheet" type="text/css" href="style/pickdestination.css">
-		<link rel="stylesheet" type="text/css" href="style/chatbox.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-		<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-app.js"></script>
-		<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js"></script>
-		<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	</head>
-	<body>
 	<div>
 		<p id="hi_username">Hi, <b><%= nameuser %></b> !</p>
 		<h1 id="logo">
@@ -104,10 +127,17 @@
 		}
 	
 		var chatApp = angular.module("chatApp", []);
-		chatApp.controller('chatController', function($scope) {
+		chatApp.controller('chatController', function($scope, $http) {
 			$scope.userid =  "<%= userid %>";
 			$scope.driverid = "<%= custid %>";
 			$scope.message = [];
+			
+			$http.get("http://localhost:3000/loadhistory?id_sender="+$scope.userid+"&id_receiver="+$scope.driverid)
+		    .then(function(response) {
+		    	console.log(response.data);
+		        $scope.message = response.data;
+		    });
+			
 			const messaging = firebase.messaging();
 			messaging.onMessage(function(payload) {
 			    console.log("Message received. ", payload);
@@ -120,11 +150,13 @@
 				$scope.message.push(notification);
 	  			$scope.$apply();
 			});
+			
 			$scope.send = function(id, rid, msg) {
 				var notification = {
 					id_sender: id,
 					id_receiver: rid,
-					message: msg
+					message: msg,
+					issave: 1
 				}
 				$scope.message.push(notification);
 		    	sendMessage(notification);
@@ -142,7 +174,7 @@
 		}
 	</script>
 	
-		<table id="outerchatbox" ng-app = "chatApp" ng-controller = "chatController">
+	<table id="outerchatbox" ng-app = "chatApp" ng-controller = "chatController">
 		<tr id="chat">
 			<td class="chatborder">
 				<div id="chatholder">
@@ -173,6 +205,6 @@
 		</tr>
 	</table>
 	
-	</body>
+</body>
 
 </html>

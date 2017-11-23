@@ -39,6 +39,6 @@
 		OjekData ps = service.getOjekDataImplPort();
 		ps.hideUserHistory(Integer.parseInt(request.getParameter("id_history")));
 	%>
-	<script>window.location.href = "http://localhost:8080/Client/history-penumpang.jsp"</script>
+	<script>window.location.href = "http://localhost:8080/history-penumpang.jsp"</script>
 </body>
 </html>

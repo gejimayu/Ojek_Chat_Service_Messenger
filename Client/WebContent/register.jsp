@@ -116,15 +116,7 @@
 			//redirect
 	        response.setStatus(response.SC_MOVED_TEMPORARILY);
 	        System.out.println("redirect destination");
-	        if (driverstatus.equals("true")) {
-	        	System.out.println("redirect profile");
-				response.setHeader("Location", "http://localhost:8080/savetoken.jsp");
-	        }
-	        else {
-	        	System.out.println("redirect destination");
-	        	response.setHeader("Location", "http://localhost:8080/savetoken.jsp");
-	        }
-
+	        response.setHeader("Location", "http://localhost:8080/savetoken.jsp");
 		} else {
 		    %> <script> alert("Username or email is already used") </script> <%
 		}  

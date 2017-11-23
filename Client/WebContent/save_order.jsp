@@ -35,7 +35,7 @@
 			if ((result == -2) || (result == -1)) {//token invalid
 				System.out.println("hello " + result);
 				response.setStatus(response.SC_MOVED_TEMPORARILY);
-			    response.setHeader("Location", "http://localhost:8080/Client/login.jsp");
+			    response.setHeader("Location", "http://localhost:8080/login.jsp");
 			    return;
 			}
 			else { //token valid, get user id
@@ -88,7 +88,7 @@
 					pick, dest, rate, comment, 0, 1);
 			
 			response.setStatus(response.SC_MOVED_TEMPORARILY);
-			response.setHeader("Location", "http://localhost:8080/selectorder.jsp");
+			response.setHeader("Location", "http://localhost:8080/selectdestination.jsp");
 		%>
 
 </body>

@@ -86,7 +86,7 @@
 		driver.put("name", nameuser);
 		String sendme = driver.toString();
 		
-		//send post request
+		//send post request to store driver in a pool of online driver
 		String query = "http://localhost:3000/storedriver";
 		try {
 			System.out.println(sendme);
@@ -132,8 +132,7 @@
 		      //scope: '/toto/'
 		    }).then(function(registration){
 		      console.log('Service worker registered : ', registration.scope);
-		    })
-		    .catch(function(err){
+		    }).catch(function(err){
 		      console.log("Service worker registration failed : ", err);
 		    });
 	

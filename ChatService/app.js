@@ -101,7 +101,7 @@ app.post('/sendchat', function(req, res){
 		message: req.body.message
 	});
 	console.log(newChat);
-
+	console.log("hello : " + req.body.issave);
 	Token.findOne({ id_user: newChat.id_receiver }, function (err, result) {
 		if (err) {
 			console.log("token not exist");
@@ -130,11 +130,14 @@ app.post('/sendchat', function(req, res){
 				    function (error, response, body) {
 				        if (!error && response.statusCode == 200) {
 				            console.log("successfully sent");
-				            newChat.save((err, saved) => {
-								if (err)
-									res.send("error");
-								console.log("inidia : " + saved);
-							});
+				            console.log(req.body.issave);
+				            if (req.body.issave == 1) {
+				            	newChat.save((err, saved) => {
+									if (err)
+										res.send("error");
+									console.log("inidia : " + saved);
+								});
+				            }
 				        }
 				        else {
 				        	console.log(response.statusCode);
@@ -149,12 +152,17 @@ app.post('/sendchat', function(req, res){
 	});
 });
 
-app.post('/loadhistory', function(req, res){
-	Chat.find({$and : [{id_sender: req.body.id_sender},{id_receiver: req.body.id_receiver}]}, function(err, response){
-		if (err)
-			console.log(err);
-		else {
-			res.send(response);
+app.get('/loadhistory', function(req, res){
+	console.log(req.query);
+	Chat.find({$or : [
+						{$and : [{id_sender: req.query.id_sender}, {id_receiver: req.query.id_receiver}]},
+						{$and : [{id_sender: req.query.id_receiver}, {id_receiver: req.query.id_sender}]}
+					]}, 
+		function(err, response){
+			if (err)
+				console.log(err);
+			else {
+				res.send(response);
 		}
 	});
 })

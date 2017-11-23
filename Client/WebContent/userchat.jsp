@@ -15,6 +15,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="style/kepala.css">
 <link rel="stylesheet" type="text/css" href="style/chatbox.css">
+<link rel="stylesheet" type="text/css" href="style/pickdestination.css">
 <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
@@ -54,7 +55,7 @@
 		JSONObject useracc = new JSONObject();
 		useracc.put("id_sender", userid);
 		useracc.put("id_receiver", driverid);
-		useracc.put("message", "yoman");
+		useracc.put("message", userid);
 		String sendme = useracc.toString();
 		
 		//send post request
@@ -149,10 +150,16 @@
 		}
 		
 		var chatApp = angular.module("chatApp", []);
-		chatApp.controller('chatController', function($scope) {
+		chatApp.controller('chatController', function($scope, $http) {
 			$scope.userid =  "<%= userid %>";
 			$scope.driverid = "<%= driverid %>";
 			$scope.message = [];
+			
+			$http.get("http://localhost:3000/loadhistory?id_sender="+$scope.userid+"&id_receiver="+$scope.driverid)
+		    .then(function(response) {
+		        $scope.message = response.data;
+		    });
+			
 			const messaging = firebase.messaging();
 			messaging.onMessage(function(payload) {
 			    console.log("Message received. ", payload);
@@ -165,34 +172,19 @@
 				$scope.message.push(notification);
 	  			$scope.$apply();
 			});
+			
 			$scope.send = function(id, rid, msg) {
 				var notification = {
 					id_sender: id,
 					id_receiver: rid,
-					message: msg
+					message: msg,
+					issave: 1
 				}
 				$scope.message.push(notification);
 		    	sendMessage(notification);
 		    	$scope.chatcontent = '';
 			};
-			//default post header
-			$http.defaults.headers.post['Content-Type'] = 'application-json/x-www-form-urlencoded;charset=utf-8';
-			//send login data
-			$http({
-		        method: 'POST',
-		        url: 'http://localhost:3000-/loadhistory',
-		        data: $.param({
-		            id_sender: req.body.id_sender,
-		            id_receiver: req.body.id_receiver
-		        }),
-		        headers: {'Content-Type': 'application-json/x-www-form-urlencoded'}
-		    	}).success(function (data, status, headers, config) {
-		        	// handle success things
-		    	}).error(function (data, status, headers, config) {
-		        	// handle error things
-		    	});
-			});
-		}
+		});
 		function sendMessage(notification) {
 			console.log(notification);
 			var http = new XMLHttpRequest();
@@ -234,7 +226,7 @@
 		</tr>
 	</table>
 
-	<form action="completeorder.jsp" method="POST">
+	<form action="completeorder.jsp" method="POST" style="text-align:center">
 		<input type="hidden" name="pick" value="<%= pick %>"/>
 		<input type="hidden" name="dest" value="<%= dest %>"/>
 		<input type="hidden" name="driverid" value="<%= driverid %>"/>

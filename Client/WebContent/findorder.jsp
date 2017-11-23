@@ -57,7 +57,7 @@
 		useracc.put("id_user", userid);
 		String sendme = useracc.toString();
 		
-		//send 2nd post request
+		//send 2nd post request to delete the driver's status of finding order
 		String query = "http://localhost:3000/deletefindingdriver";
 		URL url = new URL(query);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -100,7 +100,7 @@
 	<p id="makeanorder">LOOKING FOR AN ORDER</p>
 		
 	<form action="findingorder.jsp" method="GET">
-		<button>FIND ORDER</button>
+		<button id="findorder">FIND ORDER</button>
 	</form>	
 	
 </body>
