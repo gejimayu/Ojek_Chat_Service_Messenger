@@ -1,0 +1,72 @@
+@charset "ISO-8859-1";
+
+::-webkit-scrollbar { 
+    display: none; 
+}
+
+#outerchatbox {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.chatborder {
+	border: 1px solid black;
+}
+
+#chatholder {
+	overflow: auto; 
+	max-height: 200px;
+}
+
+#chat {
+	height: 200px;
+}
+
+#typesection {
+	height:50px;
+}
+
+#typesection button {
+	float:right;
+	margin-right: 10px;
+	border: 1px solid black;
+    width: 110px;
+    height: 25;
+    height: 27px;
+    border-radius: 5px;
+    background-color: #00cc44;
+}
+
+#typesection textarea {
+	margin-left: 10px;
+	width: 70%;
+	height: 20px;
+	border: none;
+	resize: none;
+}
+
+.ourbox {
+	width: 100%;
+}
+
+.opponentbox {
+	width: 100%;
+}
+
+.ourbox td{
+	background-color: #809fff;
+    padding: 7px;
+    float: right;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.opponentbox td {
+	background-color: #d9d9d9;
+    padding: 7px;
+    float: left;
+    margin-left: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+}

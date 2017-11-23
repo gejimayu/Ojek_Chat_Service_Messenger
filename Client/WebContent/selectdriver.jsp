@@ -78,10 +78,17 @@
 			<td class="titleorder">Select a<br>Driver</td>
 		</tr>
 	</table>
-
+	
 	<table class="tableorder">
 		<tr>
 			<td><div class="circle">3</div></td>
+			<td class="titleorder">Chat<br>Driver</td>
+		</tr>
+	</table>
+
+	<table class="tableorder">
+		<tr>
+			<td><div class="circle">4</div></td>
 			<td class="titleorder">Complete<br>your Order</td>
 		</tr>
 	</table>
