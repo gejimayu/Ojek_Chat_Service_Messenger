@@ -19,7 +19,7 @@ public interface OjekData {
 	public Babi getRatingDetail(int id_user);
 	
 	@WebMethod
-	public Babi findDriver(int id_user, String pick, String dest);
+	public Babi findDriver(int id_driver);
 	
 	@WebMethod
 	public Profile getProfileInfo(int id_user);
@@ -41,9 +41,6 @@ public interface OjekData {
 
 	@WebMethod
 	public String getNameUser(int id_user);
-	
-	@WebMethod
-	public Babi findPrefDriver(int id_user, String name);
 	
 	@WebMethod
 	public Babi getProfile(int id_user, int driverstatus);

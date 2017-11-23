@@ -10,6 +10,7 @@
 <%@ page import="org.java.ojekonline.webservice.MapElements" %>
 <%@ page import = "java.util.Date"%>
 <%@ page import = "java.text.SimpleDateFormat"%>
+<%@ page import = "java.net.*, java.io.*, org.json.JSONObject" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -25,7 +26,6 @@
 <body>
 	<%
 		int userid = -1;
-		session.setAttribute("token", "dummy");
 		
 		//create service object
 		OjekDataImplService service = new OjekDataImplService();
@@ -51,11 +51,32 @@
 		}
 		System.out.println(userid);
 		String nameuser = ps.getNameUser(userid);
-		Profile profil = ps.getProfileInfo(userid);
-		if (profil.getDriver().equals("true")) {
-			response.setStatus(response.SC_MOVED_TEMPORARILY);
-			response.setHeader("Location", "http://localhost:8080/findorder.jsp");
-		}
+		
+		//make json object
+		JSONObject useracc = new JSONObject();
+		useracc.put("id_user", userid);
+		String sendme = useracc.toString();
+		
+		//send 2nd post request
+		String query = "http://localhost:3000/deletefindingdriver";
+		URL url = new URL(query);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+		conn.setDoOutput(true); conn.setDoInput(true);
+		conn.setRequestMethod("POST");
+		OutputStream os = conn.getOutputStream();
+		os.write(sendme.getBytes("UTF-8"));
+		os.close();
+		
+		int HttpResult = conn.getResponseCode(); 
+		if (HttpResult == HttpURLConnection.HTTP_OK) {
+			//redirect
+			System.out.println("oke boss");
+		} else {
+			System.out.println("jancuk");
+		}  
+		conn.disconnect();
+
 	%>
 	
 	<div>
@@ -67,6 +88,7 @@
 		<p id="extralogo">wush... wush... ngeeeeenggg...</p>
 	</div>
 
+
 	<table id="tableactivity">
 		<tr>
 			<td id="current_activity"><a href="selectdestination.jsp">ORDER</a></td>
@@ -75,48 +97,11 @@
 		</tr>
 	</table>
 
-	<p id="makeanorder">MAKE AN ORDER</p>
+	<p id="makeanorder">LOOKING FOR AN ORDER</p>
 		
-	<table class="tableorder">
-		<tr id="current_order">
-			<td><div class="circle">1</div></td>
-			<td class="titleorder">Select<br>Destination</td>
-		</tr>
-	</table>
-
-	<table class="tableorder">
-		<tr>
-			<td><div class="circle">2</div></td>
-			<td class="titleorder">Select a<br>Driver</td>
-		</tr>
-	</table>
-
-	<table class="tableorder">
-		<tr>
-			<td><div class="circle">3</div></td>
-			<td class="titleorder">Complete<br>your Order</td>
-		</tr>
-	</table>
-
-	<form action="selectdriver.jsp" method="POST" onsubmit="return validateForm()">
-		<table id="table_form">
-			<tr>
-				<td class="inputlabel">Picking Point</td>
-				<td><input id="picking_point" type="text" name="picking_point"></td>
-				<td id="pick_req" class="required"></td>
-			</tr>
-			<tr>
-				<td class="inputlabel">Destination</td>
-				<td><input id="destination" type="text" name="destination"></td>
-				<td id="dest_req" class="required"></td>
-			</tr>
-			<tr>
-				<td class="inputlabel">Preferred Driver</td>
-				<td><input type="text" name="preferred_driver" placeholder="Optional"></td>
-			</tr>
-		</table>
-		<button id="next">NEXT</button>
-	</form>
+	<form action="findingorder.jsp" method="GET">
+		<button>FIND ORDER</button>
+	</form>	
 	
 </body>
 </html>

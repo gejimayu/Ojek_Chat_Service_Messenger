@@ -26,16 +26,22 @@
     <script src="assets/javascript/login.js"></script>
 </head>
 <body>
+	<%@ include file =  "userAgenInfo.jsp" %>
 	<%
 	if (request.getParameter("username") != null) {
 		//retrieve data
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		//get user agent
+        String userAgent = getClientBrowser(request);
+        String userIpAddr = getClientIpAddr(request);
 		
 		//make json object
 		JSONObject account = new JSONObject();
 		account.put("username", username);
 		account.put("password", password);
+		account.put("browser", userAgent);
+		account.put("ipaddr", userIpAddr);
 		String sendme = account.toString();
 		
 		//send post request
@@ -71,7 +77,7 @@
 			session.setAttribute("expiry_time", expiry_time);
 			//redirect
 	        response.setStatus(response.SC_MOVED_TEMPORARILY);
-	        response.setHeader("Location", "http://localhost:8080/Client/selectdestination.jsp");
+	        response.setHeader("Location", "http://localhost:8080/savetoken.jsp");
 		} else {
 		    %> <script> alert("Wrong password / username") </script> <%
 		}  

@@ -115,14 +115,16 @@
 			session.setAttribute("expiry_time", expiry_time);
 			//redirect
 	        response.setStatus(response.SC_MOVED_TEMPORARILY);
+	        System.out.println("redirect destination");
 	        if (driverstatus.equals("true")) {
 	        	System.out.println("redirect profile");
-				response.setHeader("Location", "http://localhost:8080/Client/profile.jsp");
+				response.setHeader("Location", "http://localhost:8080/savetoken.jsp");
 	        }
 	        else {
 	        	System.out.println("redirect destination");
-	        	response.setHeader("Location", "http://localhost:8080/Client/selectdestination.jsp");
+	        	response.setHeader("Location", "http://localhost:8080/savetoken.jsp");
 	        }
+
 		} else {
 		    %> <script> alert("Username or email is already used") </script> <%
 		}  

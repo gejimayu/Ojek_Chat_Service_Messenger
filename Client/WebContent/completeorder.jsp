@@ -35,7 +35,7 @@
 		int result = ps.validateToken(token, expiry_time);
 		if ((result == -2) || (result == -1)) {//token invalid
 			response.setStatus(response.SC_MOVED_TEMPORARILY);
-		    response.setHeader("Location", "http://localhost:8080/Client/login.jsp");
+		    response.setHeader("Location", "http://localhost:8080/login.jsp");
 		    return;
 		}
 		else { //token valid, get user id
@@ -109,7 +109,7 @@
 	
 		<%	} %>
 	
-		<form action="selectdestination.jsp" method="POST" onsubmit="return validateForm2()">
+		<form action="save_order.jsp" method="POST" onsubmit="return validateForm2()">
 		    <div class="rate">
 		        <input type="radio" id="star5" name="rate" value="5" /><label for="star5" title="text">5 stars</label>
 		        <input type="radio" id="star4" name="rate" value="4" /><label for="star4" title="text">4 stars</label>
