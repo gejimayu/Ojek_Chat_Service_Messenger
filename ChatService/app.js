@@ -149,4 +149,14 @@ app.post('/sendchat', function(req, res){
 	});
 });
 
+app.post('/loadhistory', function(req, res){
+	Chat.find({$and : [{id_sender: req.body.id_sender},{id_receiver: req.body.id_receiver}]}, function(err, response){
+		if (err)
+			console.log(err);
+		else {
+			res.send(response);
+		}
+	});
+})
+
 app.listen(3000);

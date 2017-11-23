@@ -25,12 +25,10 @@
 <body>
 	<%
 		int userid = -1;
-		session.setAttribute("token", "dummy");
 		
 		//create service object
 		OjekDataImplService service = new OjekDataImplService();
 		OjekData ps = service.getOjekDataImplPort();
-		session.setAttribute("visit", "not first");
 		//get token from session
 		String token = (String) session.getAttribute("token");
 		String expiry_time = (String) session.getAttribute("expiry_time");
