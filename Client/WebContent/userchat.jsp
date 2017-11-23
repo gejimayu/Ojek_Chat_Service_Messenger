@@ -126,15 +126,54 @@
 	</table>
 	
 	<script>
+		var config = {
+			    apiKey: "AIzaSyAITe42GKTLwVBNZd3LUAwF5kDR-C1LBqc",
+			    authDomain: "wbdojek.firebaseapp.com",
+			    databaseURL: "https://wbdojek.firebaseio.com",
+			    projectId: "wbdojek",
+			    storageBucket: "wbdojek.appspot.com",
+			    messagingSenderId: "1084102565082"
+			  };
+		
+		firebase.initializeApp(config);
+		
+		if ('serviceWorker' in navigator){
+		    console.log("SW present !!! ");
+		    navigator.serviceWorker.register('firebase-messaging-sw.js', {
+		    }).then(function(registration){
+		      console.log('Service worker registered : ', registration.scope);
+		    })
+		    .catch(function(err){
+		      console.log("Service worker registration failed : ", err);
+		    });
+		}
+		
 		var chatApp = angular.module("chatApp", []);
 		chatApp.controller('chatController', function($scope) {
-			$scope.userid =  <%= userid %>;
+			$scope.userid =  "<%= userid %>";
+			$scope.driverid = "<%= driverid %>";
 			$scope.message = [];
-			$scope.send = function(id, msg) {
-				$scope.message.push({
-					sender: id,
-					content: msg
-				});
+			const messaging = firebase.messaging();
+			messaging.onMessage(function(payload) {
+			    console.log("Message received. ", payload);
+			    console.log(payload.notification.body);
+			    var notification = {
+					id_sender: $scope.driverid,
+					id_receiver: $scope.userid,
+					message: payload.notification.body
+				}
+				$scope.message.push(notification);
+	  			$scope.$apply();
+			});
+			$scope.send = function(id, rid, msg) {
+				var notification = {
+					id_sender: id,
+					id_receiver: rid,
+					message: msg
+				}
+				$scope.message.push(notification);
+		    	sendMessage(notification);
+		    	$scope.chatcontent = '';
 			};
 			//default post header
 			$http.defaults.headers.post['Content-Type'] = 'application-json/x-www-form-urlencoded;charset=utf-8';
@@ -147,12 +186,20 @@
 		            id_receiver: req.body.id_receiver
 		        }),
 		        headers: {'Content-Type': 'application-json/x-www-form-urlencoded'}
-		    }).success(function (data, status, headers, config) {
-		        // handle success things
-		    }).error(function (data, status, headers, config) {
-		        // handle error things
-		    });
-		});
+		    	}).success(function (data, status, headers, config) {
+		        	// handle success things
+		    	}).error(function (data, status, headers, config) {
+		        	// handle error things
+		    	});
+			});
+		}
+		function sendMessage(notification) {
+			console.log(notification);
+			var http = new XMLHttpRequest();
+			var url = "http://localhost:3000/sendchat";
+			http.open("POST", url, true);
+			http.setRequestHeader("Content-type", "application/json");
+			http.send(JSON.stringify(notification));
 		}
 	</script>
 	
@@ -161,17 +208,17 @@
 			<td class="chatborder">
 				<div id="chatholder">
 					<div ng-repeat = "msg in message track by $index">
-						<table ng-if="msg.sender == userid" class="ourbox">
+						<table ng-if="msg.id_sender == userid" class="ourbox">
 							<tr>
 								<td>
-									{{ msg.content }}
+									{{ msg.message }}
 								</td>
 							</tr>
 						</table>
-						<table ng-if="msg.sender != userid" class="opponentbox">
+						<table ng-if="msg.id_sender == driverid" class="opponentbox">
 							<tr>
 								<td>
-									{{ msg.content }}
+									{{ msg.message }}
 								</td>
 							</tr>
 						</table>
@@ -182,11 +229,17 @@
 		<tr id="typesection">
 			<td class="chatborder">
 				<textarea ng-model = "chatcontent"></textarea>
-				<button ng-click = "send(userid, chatcontent)">Kirim</button>
+				<button ng-click = "send(userid, driverid, chatcontent)">Kirim</button>
 			</td>
 		</tr>
 	</table>
 
+	<form action="completeorder.jsp" method="POST">
+		<input type="hidden" name="pick" value="<%= pick %>"/>
+		<input type="hidden" name="dest" value="<%= dest %>"/>
+		<input type="hidden" name="driverid" value="<%= driverid %>"/>
+		<button type="submit" id="closechat">CLOSE</button>
+	</form>
 
 </body>
 </html>

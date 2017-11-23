@@ -29,6 +29,8 @@
 		}
 		System.out.println(userid);
 		String nameuser = ps.getNameUser(userid);
+		String custid = request.getParameter("custid");
+		String namecust = ps.getNameUser(Integer.valueOf(custid));
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -37,29 +39,45 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Chat</title>
+		<link rel="stylesheet" type="text/css" href="style/kepala.css">
+		<link rel="stylesheet" type="text/css" href="style/pickdestination.css">
+		<link rel="stylesheet" type="text/css" href="style/chatbox.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-app.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	</head>
-	
 	<body>
-		<div ng-app="OrderChat">
-		    <div ng-controller="chat">
-		        <div ng-repeat="message in messages">
-		            <strong>{{message.user.name}}:</strong>
-		            <span>{{message.data}}</span>
-		        </div>
-		        <form ng-submit="send()">
-		            <input ng-model="textbox">
-		        </form>
-		    </div>
-		</div>
-	</body>
+	<div>
+		<p id="hi_username">Hi, <b><%= nameuser %></b> !</p>
+		<h1 id="logo">
+			<span id="labelgreen">PR</span>-<span id="labelred">OJEK</span>
+		</h1>
+		<a id="logout" href="logout.jsp">Logout</a>
+		<p id="extralogo">wush... wush... ngeeeeenggg...</p>
+	</div>
+
+	<table id="tableactivity">
+		<tr>
+			<td id="current_activity"><a href="selectdestination.jsp">ORDER</a></td>
+			<td class="rest_activity"><a href="history-penumpang.jsp">HISTORY</a></td>
+			<td class="rest_activity"><a href="profile.jsp">MY PROFILE</a></td>
+		</tr>
+	</table>
+	
+	<p id="makeanorder">LOOKING FOR AN ORDER</p>
+	
+	<div class="dchatheader">
+		<p id="gotorder">Got an Order!</p>
+		<p id="namecust"><%= namecust %></p>
+	</div>
 	
 	<script>
-	
+		var id_sender = "<%= userid %>"
+		var id_receiver = "<%= custid %>"
+		console.log(id_receiver);
+		
 		var config = {
 			    apiKey: "AIzaSyAITe42GKTLwVBNZd3LUAwF5kDR-C1LBqc",
 			    authDomain: "wbdojek.firebaseapp.com",
@@ -77,33 +95,84 @@
 		    navigator.serviceWorker.register('firebase-messaging-sw.js', {
 		      //scope: '/toto/'
 		    }).then(function(registration){
-		      console.log('Service worker registered : ', registration.scope);
+		    	console.log('Service worker registered : ', registration.scope);
 		    })
 		    .catch(function(err){
-		      console.log("Service worker registration failed : ", err);
+		    	console.log("Service worker registration failed : ", err);
 		    });
 	
 		}
 	
-		var chat = angular.module('OrderChat', []);
-		chat.controller( 'chat', [ 'Messages', '$scope', function($scope) {
-		    // Message Inbox
-		    $scope.messages = [];
-		    // Receive Messages
+		var chatApp = angular.module("chatApp", []);
+		chatApp.controller('chatController', function($scope) {
+			$scope.userid =  "<%= userid %>";
+			$scope.driverid = "<%= custid %>";
+			$scope.message = [];
 			const messaging = firebase.messaging();
 			messaging.onMessage(function(payload) {
-				  console.log("Message received. ", payload);
-				  $scope.messages.push(payload);
+			    console.log("Message received. ", payload);
+			    console.log(payload.notification.body);
+			    var notification = {
+					id_sender: $scope.driverid,
+					id_receiver: $scope.userid,
+					message: payload.notification.body
+				}
+				$scope.message.push(notification);
+	  			$scope.$apply();
 			});
-		    // Send Messages
-		    $scope.send = function() {
-		        Messages.send({ 
-		            data: $scope.textbox
-		        });
-		    };
-		}]);
+			$scope.send = function(id, rid, msg) {
+				var notification = {
+					id_sender: id,
+					id_receiver: rid,
+					message: msg
+				}
+				$scope.message.push(notification);
+		    	sendMessage(notification);
+		    	$scope.chatcontent = '';
+			};
+		});
 		
-		function sendMessage()
+		function sendMessage(notification) {
+			console.log(notification);
+			var http = new XMLHttpRequest();
+			var url = "http://localhost:3000/sendchat";
+			http.open("POST", url, true);
+			http.setRequestHeader("Content-type", "application/json");
+			http.send(JSON.stringify(notification));
+		}
 	</script>
+	
+		<table id="outerchatbox" ng-app = "chatApp" ng-controller = "chatController">
+		<tr id="chat">
+			<td class="chatborder">
+				<div id="chatholder">
+					<div ng-repeat = "msg in message track by $index">
+						<table ng-if="msg.id_sender == userid" class="ourbox">
+							<tr>
+								<td>
+									{{ msg.message }}
+								</td>
+							</tr>
+						</table>
+						<table ng-if="msg.id_sender == driverid" class="opponentbox">
+							<tr>
+								<td>
+									{{ msg.message }}
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr id="typesection">
+			<td class="chatborder">
+				<textarea ng-model = "chatcontent"></textarea>
+				<button ng-click = "send(userid, driverid, chatcontent)">Kirim</button>
+			</td>
+		</tr>
+	</table>
+	
+	</body>
 
 </html>
