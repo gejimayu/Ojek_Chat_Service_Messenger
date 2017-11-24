@@ -15,6 +15,7 @@
 	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src = "javascript/scrollglue.js"></script>
 </head>
 <body>
 	
@@ -117,7 +118,7 @@
 	
 		}
 	
-		var chatApp = angular.module("chatApp", []);
+		var chatApp = angular.module("chatApp", ['luegg.directives']);
 		chatApp.controller('chatController', function($scope, $http) {
 			$scope.userid =  "<%= userid %>";
 			$scope.driverid = "<%= custid %>";
@@ -173,7 +174,7 @@
 	<table id="outerchatbox" ng-app = "chatApp" ng-controller = "chatController">
 		<tr id="chat">
 			<td class="chatborder">
-				<div id="chatholder">
+				<div id="chatholder" scroll-glue>
 					<div ng-repeat = "msg in message track by $index">
 						<table ng-if="msg.id_sender == userid" class="ourbox">
 							<tr>
