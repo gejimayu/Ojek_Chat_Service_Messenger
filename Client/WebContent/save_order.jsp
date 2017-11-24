@@ -23,7 +23,6 @@
 			//create service object
 			OjekDataImplService service = new OjekDataImplService();
 			OjekData ps = service.getOjekDataImplPort();
-			session.setAttribute("visit", "not first");
 			//get token from session
 			String token = (String) session.getAttribute("token");
 			String expiry_time = (String) session.getAttribute("expiry_time");
@@ -48,6 +47,8 @@
 			int driverid = Integer.parseInt(request.getParameter("driverid"));
 			String pick = (String) request.getParameter("pick");
 			String dest = (String) request.getParameter("dest");
+			System.out.println("save_order pick : " + pick);
+			System.out.println("save_order dest : " + dest);
 			int rate = Integer.parseInt(request.getParameter("rate"));
 			String comment = request.getParameter("comment");
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

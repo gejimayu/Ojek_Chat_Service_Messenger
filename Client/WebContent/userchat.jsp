@@ -24,7 +24,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 </head>
-<body>
+<body ng-app = "chatApp" ng-controller = "chatController">
 	<%
 		int userid = -1;
 		
@@ -33,6 +33,8 @@
 				driverid = request.getParameter("driverid"),
 				token = (String) session.getAttribute("token"),
 				expiry_time = (String) session.getAttribute("expiry_time");	
+		
+		System.out.println("userchat pick : " + pick);
 		
 		//create service object
 		OjekDataImplService service = new OjekDataImplService();
@@ -59,7 +61,7 @@
 		String sendme = useracc.toString();
 		
 		//send post request
-		String query = "http://localhost:3000/sendchat"; 
+		String query = "http://localhost:3000/chats"; 
 		URL url = new URL(query);
 		String key = "AAAA_GmMXNo:APA91bHPCn5TqamLyqh8Fpw0mjP78qrDQpOw1HE0jNCLP8SV7PXHzJYb_0cX4xRWAF8jHQsoF0rNMQS0LHK-De1kkx9YsC_ifYj62iVQ9tcew9S9In3jXSHI118sifj1uJAHJVHQjHvb";
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -143,8 +145,7 @@
 		    navigator.serviceWorker.register('firebase-messaging-sw.js', {
 		    }).then(function(registration){
 		      console.log('Service worker registered : ', registration.scope);
-		    })
-		    .catch(function(err){
+		    }).catch(function(err){
 		      console.log("Service worker registration failed : ", err);
 		    });
 		}
@@ -155,7 +156,7 @@
 			$scope.driverid = "<%= driverid %>";
 			$scope.message = [];
 			
-			$http.get("http://localhost:3000/loadhistory?id_sender="+$scope.userid+"&id_receiver="+$scope.driverid)
+			$http.get("http://localhost:3000/chats?id_sender="+$scope.userid+"&id_receiver="+$scope.driverid)
 		    .then(function(response) {
 		        $scope.message = response.data;
 		    });
@@ -173,12 +174,12 @@
 	  			$scope.$apply();
 			});
 			
-			$scope.send = function(id, rid, msg) {
+			$scope.send = function(id, rid, msg, save) {
 				var notification = {
 					id_sender: id,
 					id_receiver: rid,
 					message: msg,
-					issave: 1
+					issave: save
 				}
 				$scope.message.push(notification);
 		    	sendMessage(notification);
@@ -188,14 +189,14 @@
 		function sendMessage(notification) {
 			console.log(notification);
 			var http = new XMLHttpRequest();
-			var url = "http://localhost:3000/sendchat";
+			var url = "http://localhost:3000/chats";
 			http.open("POST", url, true);
 			http.setRequestHeader("Content-type", "application/json");
 			http.send(JSON.stringify(notification));
 		}
 	</script>
 	
-	<table id="outerchatbox" ng-app = "chatApp" ng-controller = "chatController">
+	<table id="outerchatbox">
 		<tr id="chat">
 			<td class="chatborder">
 				<div id="chatholder">
@@ -221,7 +222,7 @@
 		<tr id="typesection">
 			<td class="chatborder">
 				<textarea ng-model = "chatcontent"></textarea>
-				<button ng-click = "send(userid, driverid, chatcontent)">Kirim</button>
+				<button ng-click = "send(userid, driverid, chatcontent, 1)">Kirim</button>
 			</td>
 		</tr>
 	</table>
@@ -230,7 +231,7 @@
 		<input type="hidden" name="pick" value="<%= pick %>"/>
 		<input type="hidden" name="dest" value="<%= dest %>"/>
 		<input type="hidden" name="driverid" value="<%= driverid %>"/>
-		<button type="submit" id="closechat">CLOSE</button>
+		<button id="closechat">CLOSE</button>
 	</form>
 
 </body>

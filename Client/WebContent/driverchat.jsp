@@ -46,21 +46,13 @@
 		String custid = request.getParameter("custid");
 		String namecust = ps.getNameUser(Integer.valueOf(custid));
 		
-		
 		//send 2nd post request to delete the driver's status of finding order
-		JSONObject useracc = new JSONObject();
-		useracc.put("id_user", userid);
-		String sendme = useracc.toString();
-		
-		String query = "http://localhost:3000/deletefindingdriver";
+		String query = "http://localhost:3000/drivers/" + userid;
 		URL url = new URL(query);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 		conn.setDoOutput(true); conn.setDoInput(true);
-		conn.setRequestMethod("POST");
-		OutputStream os = conn.getOutputStream();
-		os.write(sendme.getBytes("UTF-8"));
-		os.close();
+		conn.setRequestMethod("DELETE");
 		
 		int HttpResult = conn.getResponseCode(); 
 		if (HttpResult == HttpURLConnection.HTTP_OK) {
@@ -119,8 +111,7 @@
 		      //scope: '/toto/'
 		    }).then(function(registration){
 		    	console.log('Service worker registered : ', registration.scope);
-		    })
-		    .catch(function(err){
+		    }).catch(function(err){
 		    	console.log("Service worker registration failed : ", err);
 		    });
 	
@@ -132,7 +123,7 @@
 			$scope.driverid = "<%= custid %>";
 			$scope.message = [];
 			
-			$http.get("http://localhost:3000/loadhistory?id_sender="+$scope.userid+"&id_receiver="+$scope.driverid)
+			$http.get("http://localhost:3000/chats?id_sender="+$scope.userid+"&id_receiver="+$scope.driverid)
 		    .then(function(response) {
 		    	console.log(response.data);
 		        $scope.message = response.data;
@@ -147,8 +138,13 @@
 					id_receiver: $scope.userid,
 					message: payload.notification.body
 				}
-				$scope.message.push(notification);
-	  			$scope.$apply();
+			    if (notification.message === 'goaway') {
+			    	window.location = "http://localhost:8080/findorder.jsp";
+			    } 
+			    else {
+			    	$scope.message.push(notification);
+			    	$scope.$apply();
+			    }
 			});
 			
 			$scope.send = function(id, rid, msg) {
@@ -167,7 +163,7 @@
 		function sendMessage(notification) {
 			console.log(notification);
 			var http = new XMLHttpRequest();
-			var url = "http://localhost:3000/sendchat";
+			var url = "http://localhost:3000/chats";
 			http.open("POST", url, true);
 			http.setRequestHeader("Content-type", "application/json");
 			http.send(JSON.stringify(notification));

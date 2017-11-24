@@ -19,22 +19,14 @@
 		os.write(sendme.getBytes("UTF-8"));
 		os.close();
 		
-		//make json object
-		JSONObject useracc = new JSONObject();
-		useracc.put("id_user", userid);
-		sendme = useracc.toString();
-		
 		//send 2nd post request
-		query = "http://localhost:3000/deletetoken";
+		query = "http://localhost:3000/tokens/"+ userid;
 		url = new URL(query);
 		conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 		conn.setDoOutput(true);
 		conn.setDoInput(true);
-		conn.setRequestMethod("POST");
-		os = conn.getOutputStream();
-		os.write(sendme.getBytes("UTF-8"));
-		os.close();
+		conn.setRequestMethod("DELETE");
 		
 		int HttpResult = conn.getResponseCode(); 
 		if (HttpResult == HttpURLConnection.HTTP_OK) {

@@ -52,21 +52,13 @@
 		System.out.println(userid);
 		String nameuser = ps.getNameUser(userid);
 		
-		//make json object
-		JSONObject useracc = new JSONObject();
-		useracc.put("id_user", userid);
-		String sendme = useracc.toString();
-		
 		//send 2nd post request to delete the driver's status of finding order
-		String query = "http://localhost:3000/deletefindingdriver";
+		String query = "http://localhost:3000/drivers/" + userid;
 		URL url = new URL(query);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 		conn.setDoOutput(true); conn.setDoInput(true);
-		conn.setRequestMethod("POST");
-		OutputStream os = conn.getOutputStream();
-		os.write(sendme.getBytes("UTF-8"));
-		os.close();
+		conn.setRequestMethod("DELETE");
 		
 		int HttpResult = conn.getResponseCode(); 
 		if (HttpResult == HttpURLConnection.HTTP_OK) {

@@ -98,7 +98,7 @@
 				};
 				$.ajax({
 		            type: 'post',
-		            url: 'http://localhost:3000/storetoken',
+		            url: 'http://localhost:3000/tokens',
 		            data: JSON.stringify(tobesent),
 		            contentType: "application/json; charset=utf-8",
 		            traditional: true,

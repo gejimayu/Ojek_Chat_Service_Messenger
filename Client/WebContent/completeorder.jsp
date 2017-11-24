@@ -13,6 +13,10 @@
 <head>
 <link rel="stylesheet" type="text/css" href="style/kepala.css">
 <link rel="stylesheet" type="text/css" href="style/completeorder.css">
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Order</title>
 <script src="js/validateform.js"></script>
@@ -26,6 +30,9 @@
 				expiry_time = (String) session.getAttribute("expiry_time");
 		
 		int driverid =  Integer.parseInt(request.getParameter("driverid"));
+		
+		
+		System.out.println("completeorder pick : " + pick);
 		
 		//create service object
 		OjekDataImplService service = new OjekDataImplService();
@@ -43,7 +50,22 @@
 		}
 		
 		String nameuser = ps.getNameUser(userid);
-	%>	
+	%>
+	
+	<script>
+		//send notif to driver to close the chatbox
+		var notification = {
+				id_sender: "<%= userid %>",
+				id_receiver: "<%= driverid %>",
+				message: 'goaway',
+				issave: 0
+		}
+		var http = new XMLHttpRequest();
+		var url = "http://localhost:3000/chats";
+		http.open("POST", url, true);
+		http.setRequestHeader("Content-type", "application/json");
+		http.send(JSON.stringify(notification));
+	</script>	
 	
 	<div>
 		<p id="hi_username">Hi, <b><%= nameuser %></b> !</p>

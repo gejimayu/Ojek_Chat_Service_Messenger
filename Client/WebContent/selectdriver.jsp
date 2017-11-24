@@ -98,20 +98,12 @@
 		<div class="chosen_driver">
 		
 		<%
-			//make json object
-			JSONObject useracc = new JSONObject();
-			useracc.put("destination", dest);
-			useracc.put("name", prefdriver);
-			String sendme = useracc.toString();
-			System.out.println("kirimgan " + sendme);
 			//send post request
-			String query = "http://localhost:3000/selectprefdriver"; URL url = new URL(query);
+			String query = "http://localhost:3000/drivers/pref?destination="+dest+"&name="+prefdriver; 
+			URL url = new URL(query);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-			conn.setDoOutput(true); conn.setDoInput(true); conn.setRequestMethod("POST");
-			OutputStream os = conn.getOutputStream();
-			os.write(sendme.getBytes("UTF-8"));
-			os.close();
+			conn.setDoOutput(true); conn.setDoInput(true); conn.setRequestMethod("GET");
 			// read the response
 			StringBuilder sb = new StringBuilder();  
 			int HttpResult = conn.getResponseCode();
@@ -123,7 +115,7 @@
 			        sb.append(line + "\n");  
 			    }
 			    br.close();
-			    System.out.println("hasilgan : " + sb.toString());  
+			    System.out.println("hasil select pref driver : " + sb.toString());  
 				
 			    if (sb.length() > 0) { // no result
 			    	//extract JSON to get driver id
@@ -171,22 +163,16 @@
 		<div class="chosen_driver">
 		
 		<%
-			//make json object
-			useracc = new JSONObject();
-			useracc.put("destination", dest);
-			sendme = useracc.toString();
-			
 			//send post request
-			query = "http://localhost:3000/selectdriver"; url = new URL(query);
+			query = "http://localhost:3000/drivers?destination="+dest; 
+			url = new URL(query);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-			conn.setDoOutput(true); conn.setDoInput(true); conn.setRequestMethod("POST");
-			os = conn.getOutputStream();
-			os.write(sendme.getBytes("UTF-8"));
-			os.close();
+			conn.setDoOutput(true); conn.setDoInput(true); conn.setRequestMethod("GET");
 			
 			//array for results
 			ArrayList<Integer> listdriver = new ArrayList<Integer>();
+					
 			// read the response
 			sb = new StringBuilder();  
 			HttpResult = conn.getResponseCode();
@@ -198,7 +184,7 @@
 			        sb.append(line + "\n");  
 			    }
 			    br.close();
-			    System.out.println("hasilgan : " + sb.toString());  
+			    System.out.println("hasil select drivers : " + sb.toString());  
 			    
 			    if (sb.length() > 0) {
 			    	JSONArray jsonArr = new JSONArray(sb.toString());
@@ -233,7 +219,8 @@
 										<span id='driver_rating'>☆ <%= Float.parseFloat(hasil.get("avgrating"))  %></span> 
 										(<%= hasil.get("num_votes") %> votes) <br>
 										<form action='http://localhost:8080/userchat.jsp' method='POST'>
-											<input type="hidden" name="userid" value="<%= userid %>"/>
+											<input type="hidden" name="pick" value="<%=pick%>">
+											<input type="hidden" name="dest" value="<%=dest%>">
 											<button name='driverid' value='<%=hasil.get("id_driver")%>'>I CHOOSE YOU!</button>
 										</form>
 									</td>

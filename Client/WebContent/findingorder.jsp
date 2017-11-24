@@ -87,7 +87,7 @@
 		String sendme = driver.toString();
 		
 		//send post request to store driver in a pool of online driver
-		String query = "http://localhost:3000/storedriver";
+		String query = "http://localhost:3000/drivers";
 		try {
 			System.out.println(sendme);
 			URL url = new URL(query);
