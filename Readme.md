@@ -156,17 +156,21 @@ Harap semua anggota kelompok mengerjakan baik implementasi Firebase sebagai *clo
 
 
 Chat App Front-end :
-1. Fungsionalitas A : 135140XX  
-2. Fungsionalitas B : 135140XX  
-
+1. Fungsionalitas Chat App Front End : 13515034, 13515040, 13515118 
 
 Chat REST Service:  
-1. Fungsionalitas C : 135140XX  
-2. Fungsionalitas D : 135140XX  
+1. Fungsionalitas Save Chat : 13515040  
+2. Fungsionalitas Load Chat : 13515040  
+3. Fungsionalitas Send Chat : 13515034  
+4. Fungsionalitas Receive Chat : 13515034  
+5. Fungsionalitas Add Online Driver : 13515118  
+6. Fungsionalitas Get Online Driver : 13515118  
+7. Fungsionalitas Save Token : 13515118  
+8. Fungsionalitas Delete Token : 13515118  
 
 Fitur security (IP, User-agent) :
-1. Fungsionalitas E : 135140XX
-2. Fungsionalitas F : 135140XX
+1. Fungsionalitas IP Address Token : 13514118  
+2. Fungsionalitas User-Agent Token : 13514118  
 
 
 ## About
