@@ -18,12 +18,12 @@
     <!-- Custom CSS -->
     <link href="style/main.css" rel="stylesheet" type='text/css'/>
     <!-- Custom Fonts -->
-    <link href="assets/fonts/font-awesome.min.css" rel="stylesheet">
+    <link href="fonts/font-awesome.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Oswald:400,500,600" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
     <!-- Script -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="assets/javascript/login.js"></script>
+    <script src="javascript/login.js"></script>
 </head>
 <body>
 	<%@ include file =  "userAgenInfo.jsp" %>
