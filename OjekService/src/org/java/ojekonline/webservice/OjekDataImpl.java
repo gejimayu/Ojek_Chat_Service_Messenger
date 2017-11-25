@@ -74,8 +74,8 @@ public class OjekDataImpl implements OjekData {
 				temp.put("votes", rs.getString("num_votes"));
 				smth.add(temp);
 			}
-			stmt.close();
-			conn.close();
+			stmt.close();//close the statement
+			conn.close();//close the connection
 		} catch (SQLException e) {
 				e.printStackTrace();
 		}
@@ -355,8 +355,8 @@ public class OjekDataImpl implements OjekData {
 				smth.add(temp);
 			}
 			
-			 stmt.close();
-		     conn.close();
+			 stmt.close();//close the statement
+		     conn.close();//close the connection
 		} catch (SQLException e) {
 				e.printStackTrace();
 		}
@@ -391,8 +391,8 @@ public class OjekDataImpl implements OjekData {
 				smth.add(temp);
 			}
 			
-			 stmt.close();
-		     conn.close();
+			 stmt.close();//close the statement
+		     conn.close();//close the statement
 		} catch (SQLException e) {
 				e.printStackTrace();
 		}
@@ -408,8 +408,8 @@ public class OjekDataImpl implements OjekData {
 		try {
 			String query = "UPDATE user_history SET hide=1 WHERE id_history =" + Integer.toString(id_history);
 			execute(query, 3);
-			 stmt.close();
-		     conn.close();
+			 stmt.close();//close the statement
+		     conn.close();//close the connection
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -420,8 +420,8 @@ public class OjekDataImpl implements OjekData {
 		try {
 			String query = "UPDATE driver_history SET hide=1 WHERE id_history =" + Integer.toString(id_history);
 			execute(query, 3);
-			 stmt.close();
-		     conn.close();
+			 stmt.close();//close the statement
+		     conn.close();//close the connection
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -438,8 +438,8 @@ public class OjekDataImpl implements OjekData {
 					+ "WHERE id_user =" + id_user + "";
 			execute(query, 2);
 			
-			stmt.close();
-		    conn.close();
+			stmt.close();//close the statement
+		    conn.close();//close the connection
 		} catch (SQLException e) {
 				e.printStackTrace();
 		}	
@@ -469,8 +469,8 @@ public class OjekDataImpl implements OjekData {
 				execute(query, 2);
 			}
 			
-			 stmt.close();
-		     conn.close();
+			 stmt.close();//close the statement
+		     conn.close();//close the connection
 		} catch (SQLException e) {
 				e.printStackTrace();
 		}
@@ -480,8 +480,8 @@ public class OjekDataImpl implements OjekData {
 		try {
 			String query = ("INSERT INTO user (name, email, phone_number, driver_status) VALUES ('"+name+"','"+email+"','"+phone_number+"','"+driver_status+"')");
 			execute(query, 2);
-			 stmt.close();
-		     conn.close();
+			 stmt.close();//close the statement
+		     conn.close();//close the connection
 		} catch (SQLException e) {
 				e.printStackTrace();
 		}
@@ -496,8 +496,8 @@ public class OjekDataImpl implements OjekData {
 			if (rs.next())
 				result = rs.getString("prof_pic");
 		
-			stmt.close();
-	        conn.close();
+			stmt.close();//close the statement
+	        conn.close();//close the connection
 		} catch (SQLException e) {
 		} 
         
