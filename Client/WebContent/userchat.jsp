@@ -176,6 +176,7 @@
 			});
 			
 			$scope.send = function(id, rid, msg, save) {
+				
 				var notification = {
 					id_sender: id,
 					id_receiver: rid,
@@ -222,7 +223,7 @@
 		</tr>
 		<tr id="typesection">
 			<td class="chatborder">
-				<textarea ng-model = "chatcontent"></textarea>
+				<input type="text" ng-model = "chatcontent"></input>
 				<button ng-click = "send(userid, driverid, chatcontent, 1)">Kirim</button>
 			</td>
 		</tr>

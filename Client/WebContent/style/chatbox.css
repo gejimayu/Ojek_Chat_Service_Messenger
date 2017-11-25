@@ -37,20 +37,24 @@
     background-color: #00cc44;
 }
 
-#typesection textarea {
+#typesection input {
 	margin-left: 10px;
 	width: 70%;
 	height: 20px;
 	border: none;
-	resize: none;
 }
 
 .ourbox {
-	width: 100%;
+	width: 60%;
+	float:right;
+	table-layout: fixed;
+	word-break: break-all;
 }
 
 .opponentbox {
-	width: 100%;
+	width: 60%;
+	table-layout:fixed;
+	word-break: break-all;
 }
 
 .ourbox td{
