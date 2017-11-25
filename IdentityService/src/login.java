@@ -33,11 +33,11 @@ public class login extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		StringBuffer jb = new StringBuffer();
-		String line = null;
-		String username = null;
-		String password = null;
-		String browser = null;
-		String ipaddr = null;
+		String line = null;//initiation
+		String username = null;//initiation
+		String password = null;//initiation
+		String browser = null;//initiation
+		String ipaddr = null;//initiation
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		//get current time
 		Date date = new Date();
