@@ -10,12 +10,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlRootElement( name = "Profile" )
 public class Profile {  
-	protected String driver;
-    protected String email;
-    protected String fullName;
-    protected String phoneNumber;
-    protected String picture;
-    protected String username;
+	protected String driver;//name of the driver
+    protected String email;//email of user
+    protected String fullName;//fullname of user
+    protected String phoneNumber;//phone number of user
+    protected String picture;//profile pictur of user
+    protected String username;//username of the user
 
     /**
      * Gets the value of the driver property.
