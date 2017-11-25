@@ -51,7 +51,7 @@ public class TokenControllerImpl implements TokenController{
 	@Override
 	public int validateToken(String token, String expirytime) {
 		//return -2 : token invalid, -1 : token expired, else : token valid = user_id
-		int result = 0;
+		int result = 0;//initialization
 		
 		//get current date
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -80,8 +80,8 @@ public class TokenControllerImpl implements TokenController{
 			else { //token invalid
 				result = -2; 
 			}
-			stmt.close();
-	        conn.close();
+			stmt.close();//close the statement
+	        conn.close();//close the connection
 		} catch (SQLException e) {
 		} 
 		System.out.println("Comparison result : " + result);
